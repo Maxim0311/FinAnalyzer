@@ -6,7 +6,7 @@ public class RequestToJoin : BaseEntity
 
     public int RoomId { get; set; }
 
-    public User User { get; set; }
+    public Person Person { get; set; }
 
-    public int UserId { get; set; }
+    public int PersonId { get; set; }
 }

@@ -11,10 +11,10 @@ public class BaseEntityConfiguration<TEnity> : IEntityTypeConfiguration<TEnity> 
         builder.HasKey(x => x.Id);
         builder.Property(x => x.CreateDate)
             .HasColumnName("create_date")
-            .HasDefaultValueSql("GET_DATE()");
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
         builder.Property(x => x.UpdateDate)
             .HasColumnName("update_date")
-            .HasDefaultValueSql("GET_DATE()");
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
         builder.Property(x => x.DeleteDate).HasColumnName("delete_date");
     }
 }

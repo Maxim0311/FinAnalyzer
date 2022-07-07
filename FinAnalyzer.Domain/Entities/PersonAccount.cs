@@ -2,8 +2,8 @@
 
 public class PersonAccount : Account
 {
-    public User User { get; set; }
+    public Person Person { get; set; }
 
-    public int UserId { get; set; }
+    public int PersonId { get; set; }
 }
 

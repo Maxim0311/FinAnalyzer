@@ -8,7 +8,7 @@ public class PersonAccountConfiguration : IEntityTypeConfiguration<PersonAccount
 {
     public void Configure(EntityTypeBuilder<PersonAccount> builder)
     {
-        builder.Property(p => p.UserId).HasColumnName("user_id");
+        builder.Property(p => p.PersonId).HasColumnName("person_id");
 
         builder.HasData(new PersonAccount
         {
@@ -16,7 +16,7 @@ public class PersonAccountConfiguration : IEntityTypeConfiguration<PersonAccount
             Name = "personAccount",
             Balance = 1000,
             RoomId = 1,
-            UserId = 1,
+            PersonId = 1,
         });
     }
 }

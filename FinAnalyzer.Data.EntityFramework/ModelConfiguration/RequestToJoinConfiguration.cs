@@ -16,7 +16,7 @@ namespace FinAnalyzer.Data.EntityFramework.ModelConfiguration
             base.Configure(builder);
 
             builder.ToTable("request_to_join");
-            builder.Property(p => p.UserId).HasColumnName("user_id");
+            builder.Property(p => p.PersonId).HasColumnName("person_id");
             builder.Property(p => p.RoomId).HasColumnName("room_id");
         }
     }

@@ -16,7 +16,7 @@ public class Room : BaseEntity
 
     public IEnumerable<RequestToJoin> RequestsToJoin { get; set; }
 
-    public IEnumerable<User> Users { get; set; }
-    public IEnumerable<UserRoom> UserRooms { get; set; }
+    public IEnumerable<Person> Persons { get; set; }
+    public IEnumerable<PersonRoom> PersonRooms { get; set; }
 }
 

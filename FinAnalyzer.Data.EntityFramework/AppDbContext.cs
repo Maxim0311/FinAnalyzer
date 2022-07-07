@@ -7,7 +7,7 @@ namespace FinAnalyzer.Data.EntityFramework;
 public class AppDbContext : DbContext
 {
     public DbSet<Room> Rooms { get; set; }
-    public DbSet<User> Users { get; set; }
+    public DbSet<Person> Persons { get; set; }
     public DbSet<Account> Accounts { get; set; }
     public DbSet<PersonAccount> PersonAccounts { get; set; }
     public DbSet<RoomAccount> RoomAccounts { get; set; }
