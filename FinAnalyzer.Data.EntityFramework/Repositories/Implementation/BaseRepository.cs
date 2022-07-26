@@ -13,12 +13,31 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         _context = context;
     }
 
-    public async Task<TEntity?> GetByIdAsync(int id)
+    public virtual async Task<int> CreateAsync(TEntity entity)
+    {
+        _context.Set<TEntity>().Add(entity);
+        await _context.SaveChangesAsync();
+        return entity.Id;
+    }
+
+    public virtual async Task<bool> DeleteAsync(int id)
+    {
+        var entity = await GetByIdAsync(id);
+
+        if (entity is null) return false;
+
+        entity.DeleteDate = DateTime.UtcNow;
+
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public virtual async Task<TEntity?> GetByIdAsync(int id)
     {
         return await _context.Set<TEntity>().FindAsync(id);
     }
 
-    public async Task<bool> IsExistAsync(int id)
+    public virtual async Task<bool> IsExistAsync(int id)
     {
         return await _context.Set<TEntity>().AnyAsync(entity => entity.Id == id);
     }

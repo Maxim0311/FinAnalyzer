@@ -11,22 +11,11 @@ public class RoomRepository : BaseRepository<Room>, IRoomRepository
     {
     }
 
-    public async Task<int> CreateAsync(Room room)
+    public override async Task<int> CreateAsync(Room room)
     {
         _context.Rooms.Add(room);
         await _context.SaveChangesAsync();
         return room.Id;
-    }
-
-    public async Task<bool> DeleteAsync(int id)
-    {
-        var room = await GetByIdAsync(id);
-
-        if (room is null) return false;
-
-        room.DeleteDate = DateTime.UtcNow;
-        await UpdateAsync(room);
-        return true;
     }
 
     public async Task<PaginationResponse<Room>> GetAllAsync(PaginationRequest pagination)
