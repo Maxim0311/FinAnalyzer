@@ -10,7 +10,12 @@ public static class FinAnalyserDI
     public static IServiceCollection AddRepositoriesDI(this IServiceCollection services)
     {
         return services
-            .AddScoped<IRoomRepository, RoomRepository>();
+            .AddScoped<IRoomRepository, RoomRepository>()
+            .AddScoped<IPersonRepository, PersonRepository>()
+            .AddScoped<IPersonAccountRepository, PersonAccountRepository>()
+            .AddScoped<IRoomAccountRepository, RoomAccountRepository>()
+            .AddScoped<IThirdPartyAccountRepository, ThirdPartyAccountRepository>()
+            .AddScoped<IAccountRepository, AccountRepository>();
     }
 
     public static IServiceCollection AddServicesDI(this IServiceCollection services)

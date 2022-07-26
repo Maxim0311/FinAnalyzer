@@ -11,6 +11,7 @@ public class AppDbContext : DbContext
     public DbSet<Account> Accounts { get; set; }
     public DbSet<PersonAccount> PersonAccounts { get; set; }
     public DbSet<RoomAccount> RoomAccounts { get; set; }
+    public DbSet<ThirdPartyAccount> ThirdPartyAccounts { get; set; }
     public DbSet<RequestToJoin> RequestsToJoin { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
     public DbSet<Category> Categories { get; set; }
