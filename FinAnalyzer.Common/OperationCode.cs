@@ -7,7 +7,8 @@ public enum OperationCode : short
     Error = 3,
     ValidationError = 4,
     EntityWasNotFound = 5,
-    Unauthorized = 6,
-    Forbidden = 7
+    AlreadyExists = 6,
+    Unauthorized = 7,
+    Forbidden = 8
 }
 

@@ -1,5 +1,6 @@
 using FinAnalyzer.Common;
 using FinAnalyzer.Data.EntityFramework;
+using FinAnalyzer.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StafferyInternal.StafferyInternal.Common;
@@ -28,6 +29,12 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(
     builder.Configuration.GetConnectionString("FinAnalyzerDb")));
+
+builder.Services.AddRepositoriesDI();
+builder.Services.AddServicesDI();
+builder.Services.AddValidatorsDI();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 

@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FinAnalyzer.Common;
+using FinAnalyzer.Domain.Entities;
 
-namespace FinAnalyzer.Data.EntityFramework.Repositories.Interfaces
+namespace FinAnalyzer.Data.EntityFramework.Repositories.Interfaces;
+
+public interface IRoomRepository : IBaseRepository<Room>
 {
-    public interface IRoomRepository
-    {
-
-    }
+    Task<PaginationResponse<Room>> GetAllAsync(PaginationRequest pagination);
+    Task<PaginationResponse<Room>> GetByPersonIdAsync(int personId, PaginationRequest pagination);
+    Task<Room?> GetByNameAsync(string name);
+    Task<int> CreateAsync(Room room);
+    Task<bool> UpdateAsync(Room room);
+    Task<bool> DeleteAsync(int id);
 }
