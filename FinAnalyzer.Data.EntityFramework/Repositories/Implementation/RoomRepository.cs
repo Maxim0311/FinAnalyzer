@@ -46,7 +46,7 @@ public class RoomRepository : BaseRepository<Room>, IRoomRepository
 
     public async Task<PaginationResponse<Room>> GetByPersonIdAsync(int personId, PaginationRequest pagination)
     {
-        var query = _context.Rooms.Where(r => r.Persons.Any(p => p.Id == personId));
+        var query = _context.Rooms.Where(r => r.PersonRooms.Any(p => p.PersonId == personId));
 
         if (!string.IsNullOrWhiteSpace(pagination.SearchText))
         {

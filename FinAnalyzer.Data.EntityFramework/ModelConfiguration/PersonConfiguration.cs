@@ -10,33 +10,33 @@ public class PersonConfiguration : BaseEntityConfiguration<Person>
     {
         base.Configure(builder);
 
-        builder.ToTable("persons");
+        builder.ToTable("person");
         builder.Property(p => p.Login).HasColumnName("login");
         builder.Property(p => p.Password).HasColumnName("password");
         builder.Property(p => p.Firstname).HasColumnName("firstname");
         builder.Property(p => p.Lastname).HasColumnName("lastname");
         builder.Property(p => p.Middlename).HasColumnName("middlename");
 
-        builder.HasMany(u => u.Rooms)
-            .WithMany(r => r.Persons)
-            .UsingEntity<PersonRoom>(
-                j => j
-                    .HasOne(pt => pt.Room)
-                    .WithMany(t => t.PersonRooms)
-                    .HasForeignKey(pt => pt.RoomId),
-                j => j
-                    .HasOne(pt => pt.Person)
-                    .WithMany(t => t.PersonRooms)
-                    .HasForeignKey(pt => pt.PersonId),
-                j =>
-                {
-                    j.HasKey(t => new { t.PersonId, t.RoomId });
-                    j.ToTable("person_room");
-                    j.Property(p => p.PersonId).HasColumnName("person_id");
-                    j.Property(p => p.RoomId).HasColumnName("room_id");
-                    j.Property(p => p.Role).HasColumnName("role");
-                    j.HasDiscriminator<string>("descriminator");
-                });
+        //builder.HasMany(u => u.Rooms)
+        //    .WithMany(r => r.Persons)
+        //    .UsingEntity<PersonRoom>(
+        //        j => j
+        //            .HasOne(pt => pt.Room)
+        //            .WithMany(t => t.PersonRooms)
+        //            .HasForeignKey(pt => pt.RoomId),
+        //        j => j
+        //            .HasOne(pt => pt.Person)
+        //            .WithMany(t => t.PersonRooms)
+        //            .HasForeignKey(pt => pt.PersonId),
+        //        j =>
+        //        {
+        //            j.HasKey(t => new { t.PersonId, t.RoomId });
+        //            j.ToTable("person_room");
+        //            j.Property(p => p.PersonId).HasColumnName("person_id");
+        //            j.Property(p => p.RoomId).HasColumnName("room_id");
+        //            j.Property(p => p.Role).HasColumnName("role");
+        //            j.HasDiscriminator<string>("descriminator");
+        //        });
 
         builder.HasData(new Person
         {

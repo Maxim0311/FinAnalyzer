@@ -8,6 +8,9 @@ public class PersonRoomConfiguration : IEntityTypeConfiguration<PersonRoom>
 {
     public void Configure(EntityTypeBuilder<PersonRoom> builder)
     {
+        builder.HasKey(p => new { p.PersonId, p.RoomId });
+
+        builder.ToTable("person_room");
         builder.Property(p => p.PersonId).HasColumnName("person_id");
         builder.Property(p => p.RoomId).HasColumnName("room_id");
         builder.Property(p => p.Role).HasColumnName("role");

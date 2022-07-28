@@ -3,6 +3,7 @@ using System;
 using FinAnalyzer.Data.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FinAnalyzer.Data.EntityFramework.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220728203016_FixedPersonRoom")]
+    partial class FixedPersonRoom
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,7 +181,7 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("person", (string)null);
+                    b.ToTable("persons", (string)null);
 
                     b.HasData(
                         new
@@ -213,7 +215,7 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("person_room", (string)null);
+                    b.ToTable("PersonRoom");
                 });
 
             modelBuilder.Entity("FinAnalyzer.Domain.Entities.RequestToJoin", b =>
