@@ -2,7 +2,7 @@
 
 public enum RoomRole
 {
-    Creator,
+    Creator = 1,
     Admin,
     Participant
 }

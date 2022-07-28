@@ -17,8 +17,16 @@ public class RoomController : ControllerBase
         _roomService = roomService;
     }
 
-    [HttpGet("GetAll")]
-    public async Task<ActionResult<PaginationResponse<RoomResponse>>> GetAll(string? searchText, int skip = 0, int take = 20)
+    /// <summary>
+    /// Получение коллекции всех комнат
+    /// </summary>
+    /// <param name="searchText">Поиск по названию и описанию</param>
+    /// <param name="skip"></param>
+    /// <param name="take"></param>
+    /// <returns></returns>
+    [HttpGet]
+    public async Task<ActionResult<OperationResult<PaginationResponse<RoomResponse>>>> 
+        GetAll(string? searchText, int skip = 0, int take = 20)
     {
         var pagination = new PaginationRequest
         {
@@ -27,22 +35,114 @@ public class RoomController : ControllerBase
             Take = take
         };
 
-        var response = await _roomService.GetAllAsync(pagination);
+        var result = await _roomService.GetAllAsync(pagination);
 
-        if (response.Success)
-            return Ok(response);
+        if (result.Success)
+            return Ok(result);
 
-        if (response.ErrorCode == OperationCode.EntityWasNotFound)
-            return NotFound(response);
+        if (result.ErrorCode == OperationCode.EntityWasNotFound)
+            return NotFound(result);
 
-        return BadRequest(response);
+        return BadRequest(result);
+    }
+
+    /// <summary>
+    /// Получение комнаты по id
+    /// </summary>
+    /// <param name="id">id комнаты</param>
+    /// <returns></returns>
+    [HttpGet("{id}")]
+    public async Task<ActionResult<OperationResult<RoomResponse>>> 
+        GetById(int id)
+    {
+        
+
+        var result = await _roomService.GetByIdAsync(id);
+
+        if (result.Success)
+            return Ok(result);
+
+        if (result.ErrorCode == OperationCode.EntityWasNotFound)
+            return NotFound(result);
+
+        return BadRequest(result);
     }
     
-    [HttpGet("getById")]
-    public async Task<IActionResult> GetById()
+    /// <summary>
+    /// Получения коллекции комнат, в которых состоит пользователь
+    /// </summary>
+    /// <param name="id">id пользователя</param>
+    /// <param name="searchText">Поиск по названию и описанию</param>
+    /// <param name="skip"></param>
+    /// <param name="take"></param>
+    /// <returns></returns>
+    [HttpGet("get-by-personid/{id}")]
+    public async Task<ActionResult<OperationResult<PaginationResponse<RoomResponse>>>>
+        GetByPersonId(int id, string? searchText, int skip = 0, int take = 20)
     {
+        var pagination = new PaginationRequest
+        {
+            SearchText = searchText,
+            Skip = skip,
+            Take = take
+        };
 
-        return Ok(await _roomService.GetByIdAsync(1));
+        var result = await _roomService.GetByPersonIdAsync(id, pagination);
+
+        if (result.Success)
+            return Ok(result);
+
+        if (result.ErrorCode == OperationCode.EntityWasNotFound)
+            return NotFound(result);
+
+        return BadRequest(result);
+    }
+
+    /// <summary>
+    /// Создание новой комнаты
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [HttpPost("create")]
+    public async Task<ActionResult<OperationResult<int>>> Create(RoomCreateRequest request)
+    {
+        var result = await _roomService.CreateAsync(request);
+
+        if (result.Success)
+            return Ok(result);
+
+        return BadRequest(result);
+    }
+
+    /// <summary>
+    /// Редактирование существующей комнаты
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [HttpPut("update")]
+    public async Task<ActionResult<OperationResult<int>>> Update(RoomUpdateRequest request)
+    {
+        var result = await _roomService.UpdateAsync(request);
+
+        if (result.Success)
+            return Ok(result);
+
+        return BadRequest(result);
+    }
+
+    /// <summary>
+    /// Удаление комнаты
+    /// </summary>
+    /// <param name="id">id комнаты</param>
+    /// <returns></returns>
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<OperationResult<int>>> Delete(int id)
+    {
+        var result = await _roomService.DeleteAsync(id);
+
+        if (result.Success)
+            return Ok(result);
+
+        return BadRequest(result);
     }
 }
-

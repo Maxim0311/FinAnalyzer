@@ -3,6 +3,7 @@ using FinAnalyzer.Common;
 using FinAnalyzer.Core.Services.Interfaces;
 using FinAnalyzer.Data.EntityFramework.Repositories.Interfaces;
 using FinAnalyzer.Domain.Entities;
+using FinAnalyzer.Domain.Enums;
 using StafferyInternal.StafferyInternal.Common;
 
 namespace FinAnalyzer.Core.Services.Implementation;
@@ -10,12 +11,17 @@ namespace FinAnalyzer.Core.Services.Implementation;
 public class RoomService : IRoomService
 {
     private readonly IRoomRepository _roomRepository;
+    private readonly IPersonRepository _personRepository;
     private readonly IMapper _mapper;
 
-    public RoomService(IRoomRepository roomRepository, IMapper mapper)
+    public RoomService(
+        IRoomRepository roomRepository, 
+        IMapper mapper, 
+        IPersonRepository personRepository)
     {
         _roomRepository = roomRepository;
         _mapper = mapper;
+        _personRepository = personRepository;
     }
 
     public async Task<OperationResult<int>> CreateAsync(RoomCreateRequest request)
@@ -26,6 +32,38 @@ public class RoomService : IRoomService
                 "Комната с таким именем уже существует");
 
         var room = _mapper.Map<Room>(request);
+
+        var person = await _personRepository.GetByIdAsync(request.PersonId);
+
+        if (person is null)
+            return OperationResult<int>.Fail(
+                OperationCode.EntityWasNotFound,
+                "Пользователь не найден");
+
+        var personRoom = new PersonRoom
+        {
+            Room = room,
+            Person = person,
+            Role = RoomRole.Creator
+        };
+
+        room.PersonRooms.Add(personRoom);
+
+        var startRoomAccount = new RoomAccount
+        {
+            Name = Consts.StartRoomAccountName,
+            Balance = 0
+        };
+
+        var startPersonAccount = new PersonAccount
+        {
+            Person = person,
+            Name = Consts.StartPersonAccountName,
+            Balance = 0
+        };
+
+        room.Accounts.Add(startPersonAccount);
+        room.Accounts.Add(startRoomAccount);
 
         var createdId = await _roomRepository.CreateAsync(room);
 

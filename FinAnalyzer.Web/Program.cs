@@ -3,8 +3,10 @@ using FinAnalyzer.Data.EntityFramework;
 using FinAnalyzer.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using StafferyInternal.StafferyInternal.Common;
 using StafferyInternal.StafferyInternal.Web.Middleware;
+using System.Reflection;
 using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +16,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = Assembly.GetExecutingAssembly().GetName().Name,
+    });
+
+    var xmlCommentsPath = Path.ChangeExtension(Assembly.GetExecutingAssembly().Location, "xml");
+    c.IncludeXmlComments(xmlCommentsPath);
+});
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
