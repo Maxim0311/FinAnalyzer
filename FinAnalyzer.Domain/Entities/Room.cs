@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FinAnalyzer.Domain.Entities;
+﻿namespace FinAnalyzer.Domain.Entities;
 
 public class Room : BaseEntity
 {
@@ -12,11 +6,12 @@ public class Room : BaseEntity
 
     public string Description { get; set; }
 
-    public IEnumerable<Transaction> Transactions { get; set; }
+    public List<Transaction> Transactions { get; set; }
 
-    public IEnumerable<RequestToJoin> RequestsToJoin { get; set; }
+    public List<RequestToJoin> RequestsToJoin { get; set; }
 
-    public IEnumerable<Person> Persons { get; set; }
-    public IEnumerable<PersonRoom> PersonRooms { get; set; }
+    public List<Person> Persons { get; set; }
+
+    public List<PersonRoom> PersonRooms { get; set; }
 }
 

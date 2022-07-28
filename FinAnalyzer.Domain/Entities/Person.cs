@@ -12,9 +12,9 @@ public class Person : BaseEntity
 
     public string Middlename { get; set; }
 
-    public IEnumerable<Room> Rooms { get; set; }
+    public List<Room> Rooms { get; set; }
     
-    public IEnumerable<PersonAccount> Accounts { get; set; }
+    public List<PersonAccount> Accounts { get; set; }
 
-    public IEnumerable<PersonRoom> PersonRooms { get; set; }
+    public List<PersonRoom> PersonRooms { get; set; }
 }

@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FinAnalyzer.Data.EntityFramework;
 
+#nullable disable
+
 public class AppDbContext : DbContext
 {
     public DbSet<Room> Rooms { get; set; }
@@ -30,25 +32,7 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new SubCategoryConfiguration());
         modelBuilder.ApplyConfiguration(new RequestToJoinConfiguration());
         modelBuilder.ApplyConfiguration(new TransactionConfiguration());
-        modelBuilder.ApplyConfiguration(new UserConfiguration());
-
-        //modelBuilder.Entity<User>()
-        //    .HasMany(u => u.Rooms)
-        //    .WithMany(r => r.Users)
-        //    .UsingEntity<UserRoom>(
-        //        j => j
-        //            .HasOne(pt => pt.Room)
-        //            .WithMany(t => t.UserRooms)
-        //            .HasForeignKey(pt => pt.RoomId),
-        //        j => j
-        //            .HasOne(pt => pt.User)
-        //            .WithMany(t => t.UserRooms)
-        //            .HasForeignKey(pt => pt.UserId),
-        //        j =>
-        //        {
-        //            j.HasKey(t => new { t.UserId, t.RoomId });
-        //            j.ToTable("user_room");
-        //        });
+        modelBuilder.ApplyConfiguration(new PersonConfiguration());
     }
 }
 

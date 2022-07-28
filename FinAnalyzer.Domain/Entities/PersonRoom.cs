@@ -1,4 +1,6 @@
-﻿namespace FinAnalyzer.Domain.Entities;
+﻿using FinAnalyzer.Domain.Enums;
+
+namespace FinAnalyzer.Domain.Entities;
 
 public class PersonRoom
 {
@@ -10,6 +12,6 @@ public class PersonRoom
 
     public int RoomId { get; set; }
 
-    public int Role { get; set; }
+    public RoomRole Role { get; set; }
 }
 

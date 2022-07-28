@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FinAnalyzer.Data.EntityFramework.ModelConfiguration;
 
-public class UserConfiguration : BaseEntityConfiguration<Person>
+public class PersonConfiguration : BaseEntityConfiguration<Person>
 {
     public override void Configure(EntityTypeBuilder<Person> builder)
     {
@@ -31,8 +31,8 @@ public class UserConfiguration : BaseEntityConfiguration<Person>
                 j =>
                 {
                     j.HasKey(t => new { t.PersonId, t.RoomId });
-                    j.ToTable("user_room");
-                    j.Property(p => p.PersonId).HasColumnName("user_id");
+                    j.ToTable("person_room");
+                    j.Property(p => p.PersonId).HasColumnName("person_id");
                     j.Property(p => p.RoomId).HasColumnName("room_id");
                     j.Property(p => p.Role).HasColumnName("role");
                     j.HasDiscriminator<string>("descriminator");

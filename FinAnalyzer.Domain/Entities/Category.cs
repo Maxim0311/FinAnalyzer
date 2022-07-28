@@ -6,7 +6,7 @@ public class Category : BaseEntity
 
     public string Description { get; set; }
 
-    public IEnumerable<SubCategory> SubCategories { get; set; }
+    public List<SubCategory> SubCategories { get; set; }
 
     public Room Room { get; set; }
 
