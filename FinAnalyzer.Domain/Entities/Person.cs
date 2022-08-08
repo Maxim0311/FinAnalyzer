@@ -12,7 +12,9 @@ public class Person : BaseEntity
 
     public string Middlename { get; set; }
 
-    //public List<Room> Rooms { get; set; }
+    public int GlobalRoleId { get; set; }
+
+    public GlobalRole GlobalRole { get; set; }
 
     public List<PersonRoom> PersonRooms { get; set; } = new List<PersonRoom>();
 

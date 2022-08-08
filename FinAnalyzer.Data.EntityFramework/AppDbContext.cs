@@ -19,6 +19,8 @@ public class AppDbContext : DbContext
     public DbSet<Category> Categories { get; set; }
     public DbSet<SubCategory> SubCategories { get; set; }
     public DbSet<PersonRoom> PersonRooms { get; set; }
+    public DbSet<GlobalRole> GlobalRoles { get; set; }
+    public DbSet<RoomRole> RoomRoles { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
@@ -35,6 +37,8 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new TransactionConfiguration());
         modelBuilder.ApplyConfiguration(new PersonConfiguration());
         modelBuilder.ApplyConfiguration(new PersonRoomConfiguration());
+        modelBuilder.ApplyConfiguration(new RoomRoleConfiguration());
+        modelBuilder.ApplyConfiguration(new GlobalRoleConfiguration());
     }
 }
 

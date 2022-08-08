@@ -16,6 +16,7 @@ public class PersonConfiguration : BaseEntityConfiguration<Person>
         builder.Property(p => p.Firstname).HasColumnName("firstname");
         builder.Property(p => p.Lastname).HasColumnName("lastname");
         builder.Property(p => p.Middlename).HasColumnName("middlename");
+        builder.Property(p => p.GlobalRoleId).HasColumnName("global_role_id");
 
         //builder.HasMany(u => u.Rooms)
         //    .WithMany(r => r.Persons)
@@ -46,6 +47,7 @@ public class PersonConfiguration : BaseEntityConfiguration<Person>
             Firstname = "test",
             Lastname = "test",
             Middlename = "test",
+            GlobalRoleId = 1
         });
     }
 }
