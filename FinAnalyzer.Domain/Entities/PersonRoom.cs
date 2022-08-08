@@ -13,5 +13,7 @@ public class PersonRoom
     public RoomRole RoomRole { get; set; }
 
     public int RoomRoleId { get; set; }
+
+    public DateTime? DeleteDate { get; set; }
 }
 
