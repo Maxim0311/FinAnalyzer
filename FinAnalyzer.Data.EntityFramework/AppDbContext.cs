@@ -1,4 +1,5 @@
-﻿using FinAnalyzer.Data.EntityFramework.ModelConfiguration;
+﻿using FinAnalyzer.Data.EntityFramework.Extensions;
+using FinAnalyzer.Data.EntityFramework.ModelConfiguration;
 using FinAnalyzer.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,17 +29,8 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new RoomConfiguration());
-        modelBuilder.ApplyConfiguration(new AccountConfiguration());
-        modelBuilder.ApplyConfiguration(new PersonAccountConfiguration());
-        modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-        modelBuilder.ApplyConfiguration(new SubCategoryConfiguration());
-        modelBuilder.ApplyConfiguration(new RequestToJoinConfiguration());
-        modelBuilder.ApplyConfiguration(new TransactionConfiguration());
-        modelBuilder.ApplyConfiguration(new PersonConfiguration());
-        modelBuilder.ApplyConfiguration(new PersonRoomConfiguration());
-        modelBuilder.ApplyConfiguration(new RoomRoleConfiguration());
-        modelBuilder.ApplyConfiguration(new GlobalRoleConfiguration());
+        modelBuilder.AddModelConfiguration();
+        modelBuilder.AddDeletedQueryFilters();
     }
 }
 

@@ -18,6 +18,25 @@ public class RoomRepository : BaseRepository<Room>, IRoomRepository
         return room.Id;
     }
 
+    public override async Task<bool> DeleteAsync(int id)
+    {
+        var room = await _context.Rooms.Include(r => r.PersonRooms)
+            .FirstOrDefaultAsync(r => r.Id == id);
+
+        if (room is null) return false;
+
+        room.DeleteDate = DateTime.UtcNow;
+
+        foreach (var pr in room.PersonRooms)
+        {
+            pr.DeleteDate = DateTime.UtcNow;
+        }
+
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+
     public async Task<PaginationResponse<Room>> GetAllAsync(PaginationRequest pagination)
     {
         var query = _context.Rooms.AsQueryable();
@@ -73,6 +92,9 @@ public class RoomRepository : BaseRepository<Room>, IRoomRepository
 
         updatedRoom.Name = room.Name;
         updatedRoom.Description = room.Description;
+        updatedRoom.UpdateDate = DateTime.UtcNow;
+
+        await _context.SaveChangesAsync();
 
         return true;
     }

@@ -1,4 +1,5 @@
 using FinAnalyzer.Common;
+using FinAnalyzer.Common.Auth;
 using FinAnalyzer.Data.EntityFramework;
 using FinAnalyzer.Web;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

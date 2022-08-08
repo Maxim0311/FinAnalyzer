@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FinAnalyzer.Common;
+using FinAnalyzer.Common.Auth;
 using FinAnalyzer.Core.Dto.Auth;
 using FinAnalyzer.Core.Dto.Person;
 using FinAnalyzer.Core.Services.Interfaces;
@@ -18,17 +19,20 @@ public class AuthService : IAuthService
 {
     private readonly IPersonRepository _personRepository;
     private readonly IGlobalRoleRepository _globalRoleRepository;
+    private readonly IPersonRoomRepository _personRoomRepository;
     private readonly IMapper _mapper;
     private readonly AuthOptions _authOptions;
 
     public AuthService(
         IPersonRepository personRepository,
         IGlobalRoleRepository globalRoleRepository,
+        IPersonRoomRepository personRoomRepository,
         IMapper mapper,
-        IOptions<AuthOptions> authOptions) 
+        IOptions<AuthOptions> authOptions)
     {
         _personRepository = personRepository;
         _globalRoleRepository = globalRoleRepository;
+        _personRoomRepository = personRoomRepository;
         _mapper = mapper;
         _authOptions = authOptions.Value;
     }
@@ -58,6 +62,7 @@ public class AuthService : IAuthService
         return OperationResult<AuthResponse>.Fail(OperationCode.Error, "Неверный пароль");
     }
 
+
     public async Task<OperationResult<int>> RegistrationAsync(RegistrationRequest request)
     {
         if (await _personRepository.GetByLogin(request.Login) is not null)
@@ -73,6 +78,34 @@ public class AuthService : IAuthService
         var createdId = await _personRepository.CreateAsync(person);
 
         return new OperationResult<int>(createdId);
+    }
+
+    public async Task<bool> CheckRoomPermissionAsync(string jwt, int roomId, int roleId)
+    {
+        var personId = GetPersonId(jwt);
+
+        var roomCredentions = await _personRoomRepository.GetRoomCredentialsAsync(personId);
+
+        var currentRoomCredention = roomCredentions.FirstOrDefault(r => r.RoomId == roomId);
+
+        if (currentRoomCredention is null) return false;
+
+        return currentRoomCredention.RoleId <= roleId;
+    }
+
+    public bool IsPersonId(string jwt, int personId)
+    {
+        return GetPersonId(jwt) == personId;
+    }
+
+    private int GetPersonId(string jwt)
+    {
+        var token = GetJwtToken(jwt);
+
+        var personId = Convert.ToInt32(
+                token.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid)?.Value);
+
+        return personId;
     }
 
     private async Task<string> GenerateJwtTokenAsync(Person person)
@@ -96,5 +129,15 @@ public class AuthService : IAuthService
             expires: DateTime.UtcNow.AddDays(_authOptions.TokenLifeTime));
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    private JwtSecurityToken GetJwtToken(string jwt)
+    {
+        var handler = new JwtSecurityTokenHandler();
+
+        jwt = jwt.Replace("Bearer ", "");
+        var token = (JwtSecurityToken)handler.ReadToken(jwt);
+
+        return token;
     }
 }

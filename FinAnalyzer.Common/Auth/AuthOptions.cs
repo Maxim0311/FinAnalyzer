@@ -1,7 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace FinAnalyzer.Common;
+namespace FinAnalyzer.Common.Auth;
 
 #nullable disable
 
@@ -20,3 +20,4 @@ public class AuthOptions
         return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Secret));
     }
 }
+
