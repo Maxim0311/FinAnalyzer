@@ -15,13 +15,15 @@ public static class FinAnalyserDI
             .AddScoped<IPersonAccountRepository, PersonAccountRepository>()
             .AddScoped<IRoomAccountRepository, RoomAccountRepository>()
             .AddScoped<IThirdPartyAccountRepository, ThirdPartyAccountRepository>()
-            .AddScoped<IAccountRepository, AccountRepository>();
+            .AddScoped<IAccountRepository, AccountRepository>()
+            .AddScoped<IGlobalRoleRepository, GlobalRoleRepository>();
     }
 
     public static IServiceCollection AddServicesDI(this IServiceCollection services)
     {
         return services
-            .AddScoped<IRoomService, RoomService>();
+            .AddScoped<IRoomService, RoomService>()
+            .AddScoped<IAuthService, AuthService>();
     }
 
     public static IServiceCollection AddValidatorsDI(this IServiceCollection services)

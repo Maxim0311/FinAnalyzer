@@ -3,7 +3,6 @@ using FinAnalyzer.Common;
 using FinAnalyzer.Core.Services.Interfaces;
 using FinAnalyzer.Data.EntityFramework.Repositories.Interfaces;
 using FinAnalyzer.Domain.Entities;
-using FinAnalyzer.Domain.Enums;
 using StafferyInternal.StafferyInternal.Common;
 
 namespace FinAnalyzer.Core.Services.Implementation;
@@ -44,7 +43,7 @@ public class RoomService : IRoomService
         {
             Room = room,
             Person = person,
-            Role = RoomRole.Creator
+            RoomRoleId = 1
         };
 
         room.PersonRooms.Add(personRoom);

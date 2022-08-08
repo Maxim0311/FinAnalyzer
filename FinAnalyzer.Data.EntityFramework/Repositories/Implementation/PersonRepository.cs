@@ -11,6 +11,11 @@ public class PersonRepository : BaseRepository<Person>, IPersonRepository
     {
     }
 
+    public async Task<Person?> GetByLogin(string login)
+    {
+        return await _context.Persons.FirstOrDefaultAsync(x => x.Login == login);
+    }
+
     public async Task<PaginationResponse<Person>> GetAllAsync(PaginationRequest pagination)
     {
         var query = _context.Persons.AsQueryable();
@@ -18,8 +23,8 @@ public class PersonRepository : BaseRepository<Person>, IPersonRepository
         if (!string.IsNullOrWhiteSpace(pagination.SearchText))
         {
             query = query.Where(p => p.Login.Contains(pagination.SearchText) ||
-                p.Lastname.Contains(pagination.SearchText) ||
-                p.Firstname.Contains(pagination.SearchText));
+                (p.Lastname != null && p.Lastname.Contains(pagination.SearchText)) ||
+                (p.Firstname != null && p.Firstname.Contains(pagination.SearchText)));
         }
 
         var totalCount = await query.CountAsync();

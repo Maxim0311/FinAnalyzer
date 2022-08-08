@@ -1,11 +1,13 @@
 ﻿using FinAnalyzer.Common;
 using FinAnalyzer.Core;
 using FinAnalyzer.Core.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StafferyInternal.StafferyInternal.Common;
 
 namespace FinAnalyzer.Web.Controllers;
 
+[Authorize]
 [Route("api/rooms")]
 [ApiController]
 public class RoomController : ControllerBase
