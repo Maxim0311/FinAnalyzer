@@ -18,5 +18,5 @@ public class Person : BaseEntity
 
     public List<PersonRoom> PersonRooms { get; set; } = new List<PersonRoom>();
 
-    public List<PersonAccount> Accounts { get; set; }
+    public List<Account> Accounts { get; set; }
 }

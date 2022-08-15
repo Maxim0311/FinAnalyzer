@@ -10,15 +10,15 @@ public static class ModelBuilderExtension
     {
         modelBuilder.ApplyConfiguration(new RoomConfiguration());
         modelBuilder.ApplyConfiguration(new AccountConfiguration());
-        modelBuilder.ApplyConfiguration(new PersonAccountConfiguration());
         modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-        modelBuilder.ApplyConfiguration(new SubCategoryConfiguration());
         modelBuilder.ApplyConfiguration(new RequestToJoinConfiguration());
         modelBuilder.ApplyConfiguration(new TransactionConfiguration());
         modelBuilder.ApplyConfiguration(new PersonConfiguration());
         modelBuilder.ApplyConfiguration(new PersonRoomConfiguration());
         modelBuilder.ApplyConfiguration(new RoomRoleConfiguration());
         modelBuilder.ApplyConfiguration(new GlobalRoleConfiguration());
+        modelBuilder.ApplyConfiguration(new TransactionTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new AccountTypeConfiguration());
 
         return modelBuilder;
     }
@@ -32,9 +32,10 @@ public static class ModelBuilderExtension
         modelBuilder.Entity<RequestToJoin>().HasQueryFilter(e => e.DeleteDate == null);
         modelBuilder.Entity<Room>().HasQueryFilter(e => e.DeleteDate == null);
         modelBuilder.Entity<RoomRole>().HasQueryFilter(e => e.DeleteDate == null);
-        modelBuilder.Entity<SubCategory>().HasQueryFilter(e => e.DeleteDate == null);
         modelBuilder.Entity<Transaction>().HasQueryFilter(e => e.DeleteDate == null);
         modelBuilder.Entity<PersonRoom>().HasQueryFilter(e => e.DeleteDate == null);
+        modelBuilder.Entity<TransactionType>().HasQueryFilter(e => e.DeleteDate == null);
+        modelBuilder.Entity<AccountType>().HasQueryFilter(e => e.DeleteDate == null);
 
         return modelBuilder;
     }

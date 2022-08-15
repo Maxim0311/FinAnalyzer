@@ -48,17 +48,19 @@ public class RoomService : IRoomService
 
         room.PersonRooms.Add(personRoom);
 
-        var startRoomAccount = new RoomAccount
+        var startRoomAccount = new Account
         {
             Name = Consts.StartRoomAccountName,
-            Balance = 0
+            Balance = 0,
+            AccountTypeId = 2
         };
 
-        var startPersonAccount = new PersonAccount
+        var startPersonAccount = new Account
         {
             Person = person,
             Name = Consts.StartPersonAccountName,
-            Balance = 0
+            Balance = 0,
+            AccountTypeId = 1
         };
 
         room.Accounts.Add(startPersonAccount);

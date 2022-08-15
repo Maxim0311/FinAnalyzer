@@ -11,6 +11,7 @@ public class CategoryConfiguration : BaseEntityConfiguration<Category>
         base.Configure(builder);
 
         builder.ToTable("category");
+        builder.Property(p => p.IsExpenditure).HasColumnName("is_expenditure");
         builder.Property(p => p.Name).HasColumnName("name");
         builder.Property(p => p.Description).HasColumnName("description");
         builder.Property(p => p.RoomId).HasColumnName("room_id");

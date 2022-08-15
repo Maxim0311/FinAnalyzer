@@ -57,6 +57,9 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlCommentsPath);
 });
 
+builder.Services.AddCors(options => options.AddDefaultPolicy(build =>
+    build.AllowAnyOrigin()));
+
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.InvalidModelStateResponseFactory = context =>
@@ -105,6 +108,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(builder => {
+    builder.AllowAnyOrigin();
+    builder.AllowAnyHeader();
+    builder.AllowAnyMethod();
+});
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 

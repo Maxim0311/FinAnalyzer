@@ -44,8 +44,8 @@ public class RoomRepository : BaseRepository<Room>, IRoomRepository
         if (!string.IsNullOrWhiteSpace(pagination.SearchText))
         {
             query = query.Where(r =>
-                r.Name.Contains(pagination.SearchText) ||
-                r.Description.Contains(pagination.SearchText));
+                r.Name.ToLower().Contains(pagination.SearchText.ToLower()) ||
+                r.Description.ToLower().Contains(pagination.SearchText.ToLower()));
         }
 
         var totalCount = await query.CountAsync();

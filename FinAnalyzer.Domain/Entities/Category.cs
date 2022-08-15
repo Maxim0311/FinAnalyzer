@@ -6,7 +6,7 @@ public class Category : BaseEntity
 
     public string Description { get; set; }
 
-    public List<SubCategory> SubCategories { get; set; }
+    public bool IsExpenditure { get; set; }
 
     public Room Room { get; set; }
 

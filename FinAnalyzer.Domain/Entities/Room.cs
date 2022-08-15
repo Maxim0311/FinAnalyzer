@@ -10,6 +10,8 @@ public class Room : BaseEntity
 
     public List<Transaction> Transactions { get; set; }
 
+    public List<Category> Categories { get; set; }
+
     public List<RequestToJoin> RequestsToJoin { get; set; }
 
     //public List<Person> Persons { get; set; } = new List<Person>();

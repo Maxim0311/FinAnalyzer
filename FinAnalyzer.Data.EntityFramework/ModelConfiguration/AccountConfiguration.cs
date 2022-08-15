@@ -15,5 +15,7 @@ public class AccountConfiguration : BaseEntityConfiguration<Account>
         builder.Property(p => p.Name).HasColumnName("name");
         builder.Property(p => p.Balance).HasColumnName("balance");
         builder.Property(p => p.RoomId).HasColumnName("room_id");
+        builder.Property(p => p.AccountTypeId).HasColumnName("account_type_id");
+        builder.Property(p => p.PersonId).HasColumnName("person_id");
     }
 }

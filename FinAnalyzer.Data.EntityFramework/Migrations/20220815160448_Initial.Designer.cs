@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FinAnalyzer.Data.EntityFramework.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220728203016_FixedPersonRoom")]
-    partial class FixedPersonRoom
+    [Migration("20220815160448_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,6 +32,10 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AccountTypeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("account_type_id");
+
                     b.Property<decimal>("Balance")
                         .HasColumnType("numeric")
                         .HasColumnName("balance");
@@ -46,14 +50,14 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("delete_date");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
+
+                    b.Property<int?>("PersonId")
+                        .HasColumnType("integer")
+                        .HasColumnName("person_id");
 
                     b.Property<int>("RoomId")
                         .HasColumnType("integer")
@@ -67,11 +71,70 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AccountTypeId");
+
+                    b.HasIndex("PersonId");
+
                     b.HasIndex("RoomId");
 
                     b.ToTable("account", (string)null);
+                });
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Account");
+            modelBuilder.Entity("FinAnalyzer.Domain.Entities.AccountType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("create_date")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("delete_date");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("title");
+
+                    b.Property<DateTime>("UpdateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("update_date")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("account_type", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Person",
+                            UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Room",
+                            UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "ThirdParty",
+                            UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("FinAnalyzer.Domain.Entities.Category", b =>
@@ -96,6 +159,10 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
+
+                    b.Property<bool>("IsExpenditure")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_expenditure");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -124,8 +191,59 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                             Id = 1,
                             CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "description",
+                            IsExpenditure = false,
                             Name = "testCategory",
                             RoomId = 1,
+                            UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
+                });
+
+            modelBuilder.Entity("FinAnalyzer.Domain.Entities.GlobalRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("create_date")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("delete_date");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("title");
+
+                    b.Property<DateTime>("UpdateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("update_date")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("global_role", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Admin",
+                            UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "User",
                             UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
@@ -149,12 +267,14 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                         .HasColumnName("delete_date");
 
                     b.Property<string>("Firstname")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("firstname");
 
+                    b.Property<int>("GlobalRoleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("global_role_id");
+
                     b.Property<string>("Lastname")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("lastname");
 
@@ -164,7 +284,6 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                         .HasColumnName("login");
 
                     b.Property<string>("Middlename")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("middlename");
 
@@ -181,7 +300,9 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("persons", (string)null);
+                    b.HasIndex("GlobalRoleId");
+
+                    b.ToTable("person", (string)null);
 
                     b.HasData(
                         new
@@ -189,6 +310,7 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                             Id = 1,
                             CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Firstname = "test",
+                            GlobalRoleId = 1,
                             Lastname = "test",
                             Login = "admin",
                             Middlename = "test",
@@ -207,15 +329,20 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("room_id");
 
-                    b.Property<int>("Role")
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("RoomRoleId")
                         .HasColumnType("integer")
-                        .HasColumnName("role");
+                        .HasColumnName("room_role_id");
 
                     b.HasKey("PersonId", "RoomId");
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("PersonRoom");
+                    b.HasIndex("RoomRoleId");
+
+                    b.ToTable("person_room", (string)null);
                 });
 
             modelBuilder.Entity("FinAnalyzer.Domain.Entities.RequestToJoin", b =>
@@ -308,17 +435,13 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                         });
                 });
 
-            modelBuilder.Entity("FinAnalyzer.Domain.Entities.SubCategory", b =>
+            modelBuilder.Entity("FinAnalyzer.Domain.Entities.RoomRole", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("integer")
-                        .HasColumnName("category_id");
 
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
@@ -330,15 +453,10 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("delete_date");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("description");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
+                        .HasColumnName("title");
 
                     b.Property<DateTime>("UpdateDate")
                         .ValueGeneratedOnAdd()
@@ -348,9 +466,30 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.ToTable("room_role", (string)null);
 
-                    b.ToTable("sub_category", (string)null);
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Creator",
+                            UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Admin",
+                            UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Participant",
+                            UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("FinAnalyzer.Domain.Entities.Transaction", b =>
@@ -364,6 +503,9 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("numeric")
                         .HasColumnName("amount");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
@@ -389,11 +531,6 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<string>("OperationType")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("operation_type");
-
                     b.Property<int>("RoomId")
                         .HasColumnType("integer")
                         .HasColumnName("room_id");
@@ -401,6 +538,10 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                     b.Property<int>("SenderId")
                         .HasColumnType("integer")
                         .HasColumnName("sender_id");
+
+                    b.Property<int>("TransactionTypeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("transaction_type_id");
 
                     b.Property<DateTime>("UpdateDate")
                         .ValueGeneratedOnAdd()
@@ -410,61 +551,97 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("DestinationId");
 
                     b.HasIndex("RoomId");
 
                     b.HasIndex("SenderId");
 
+                    b.HasIndex("TransactionTypeId");
+
                     b.ToTable("transactions", (string)null);
                 });
 
-            modelBuilder.Entity("FinAnalyzer.Domain.Entities.PersonAccount", b =>
+            modelBuilder.Entity("FinAnalyzer.Domain.Entities.TransactionType", b =>
                 {
-                    b.HasBaseType("FinAnalyzer.Domain.Entities.Account");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
 
-                    b.Property<int>("PersonId")
-                        .HasColumnType("integer")
-                        .HasColumnName("person_id");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.HasIndex("PersonId");
+                    b.Property<DateTime>("CreateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("create_date")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.HasDiscriminator().HasValue("PersonAccount");
+                    b.Property<DateTime?>("DeleteDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("delete_date");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("title");
+
+                    b.Property<DateTime>("UpdateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("update_date")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("transaction_type", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            Balance = 1000m,
                             CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "personAccount",
-                            RoomId = 1,
-                            UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PersonId = 1
+                            Title = "Income",
+                            UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Expenditure",
+                            UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Transfer",
+                            UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
-                });
-
-            modelBuilder.Entity("FinAnalyzer.Domain.Entities.RoomAccount", b =>
-                {
-                    b.HasBaseType("FinAnalyzer.Domain.Entities.Account");
-
-                    b.HasDiscriminator().HasValue("RoomAccount");
-                });
-
-            modelBuilder.Entity("FinAnalyzer.Domain.Entities.ThirdPartyAccount", b =>
-                {
-                    b.HasBaseType("FinAnalyzer.Domain.Entities.Account");
-
-                    b.HasDiscriminator().HasValue("ThirdPartyAccount");
                 });
 
             modelBuilder.Entity("FinAnalyzer.Domain.Entities.Account", b =>
                 {
+                    b.HasOne("FinAnalyzer.Domain.Entities.AccountType", "AccountType")
+                        .WithMany()
+                        .HasForeignKey("AccountTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FinAnalyzer.Domain.Entities.Person", "Person")
+                        .WithMany("Accounts")
+                        .HasForeignKey("PersonId");
+
                     b.HasOne("FinAnalyzer.Domain.Entities.Room", "Room")
                         .WithMany("Accounts")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("AccountType");
+
+                    b.Navigation("Person");
 
                     b.Navigation("Room");
                 });
@@ -472,12 +649,23 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
             modelBuilder.Entity("FinAnalyzer.Domain.Entities.Category", b =>
                 {
                     b.HasOne("FinAnalyzer.Domain.Entities.Room", "Room")
-                        .WithMany()
+                        .WithMany("Categories")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Room");
+                });
+
+            modelBuilder.Entity("FinAnalyzer.Domain.Entities.Person", b =>
+                {
+                    b.HasOne("FinAnalyzer.Domain.Entities.GlobalRole", "GlobalRole")
+                        .WithMany()
+                        .HasForeignKey("GlobalRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GlobalRole");
                 });
 
             modelBuilder.Entity("FinAnalyzer.Domain.Entities.PersonRoom", b =>
@@ -494,9 +682,17 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FinAnalyzer.Domain.Entities.RoomRole", "RoomRole")
+                        .WithMany()
+                        .HasForeignKey("RoomRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Person");
 
                     b.Navigation("Room");
+
+                    b.Navigation("RoomRole");
                 });
 
             modelBuilder.Entity("FinAnalyzer.Domain.Entities.RequestToJoin", b =>
@@ -518,19 +714,14 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("FinAnalyzer.Domain.Entities.SubCategory", b =>
+            modelBuilder.Entity("FinAnalyzer.Domain.Entities.Transaction", b =>
                 {
                     b.HasOne("FinAnalyzer.Domain.Entities.Category", "Category")
-                        .WithMany("SubCategories")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("FinAnalyzer.Domain.Entities.Transaction", b =>
-                {
                     b.HasOne("FinAnalyzer.Domain.Entities.Account", "Destination")
                         .WithMany()
                         .HasForeignKey("DestinationId")
@@ -549,27 +740,21 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FinAnalyzer.Domain.Entities.TransactionType", "TransactionType")
+                        .WithMany()
+                        .HasForeignKey("TransactionTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
                     b.Navigation("Destination");
 
                     b.Navigation("Room");
 
                     b.Navigation("Sender");
-                });
 
-            modelBuilder.Entity("FinAnalyzer.Domain.Entities.PersonAccount", b =>
-                {
-                    b.HasOne("FinAnalyzer.Domain.Entities.Person", "Person")
-                        .WithMany("Accounts")
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Person");
-                });
-
-            modelBuilder.Entity("FinAnalyzer.Domain.Entities.Category", b =>
-                {
-                    b.Navigation("SubCategories");
+                    b.Navigation("TransactionType");
                 });
 
             modelBuilder.Entity("FinAnalyzer.Domain.Entities.Person", b =>
@@ -582,6 +767,8 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
             modelBuilder.Entity("FinAnalyzer.Domain.Entities.Room", b =>
                 {
                     b.Navigation("Accounts");
+
+                    b.Navigation("Categories");
 
                     b.Navigation("PersonRooms");
 

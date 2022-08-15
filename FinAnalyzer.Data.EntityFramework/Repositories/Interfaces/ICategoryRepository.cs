@@ -1,0 +1,8 @@
+﻿using FinAnalyzer.Domain.Entities;
+
+namespace FinAnalyzer.Data.EntityFramework.Repositories.Interfaces;
+
+public interface ICategoryRepository : IBaseRepository<Category>
+{
+    Task<IEnumerable<Category>> GetAllAsync(int roomId);
+}
