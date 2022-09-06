@@ -15,6 +15,9 @@ public class CategoryConfiguration : BaseEntityConfiguration<Category>
         builder.Property(p => p.Name).HasColumnName("name");
         builder.Property(p => p.Description).HasColumnName("description");
         builder.Property(p => p.RoomId).HasColumnName("room_id");
+        builder.Property(p => p.IconAuthor).HasColumnName("icon_author");
+        builder.Property(p => p.IconName).HasColumnName("icon_name");
+        builder.Property(p => p.Color).HasColumnName("color");
 
         builder.HasData(new Category
         {
@@ -22,6 +25,9 @@ public class CategoryConfiguration : BaseEntityConfiguration<Category>
             Name = "testCategory",
             Description = "description",
             RoomId = 1,
+            IconAuthor = "test",
+            IconName = "test",
+            Color = "black"
         });
     }
 }

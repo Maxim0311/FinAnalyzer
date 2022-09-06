@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FinAnalyzer.Data.EntityFramework.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220815160448_Initial")]
-    partial class Initial
+    [Migration("20220906154638_UpdateTableCategories")]
+    partial class UpdateTableCategories
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -145,6 +145,11 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("color");
+
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
@@ -156,9 +161,18 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                         .HasColumnName("delete_date");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
+
+                    b.Property<string>("IconAuthor")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("icon_author");
+
+                    b.Property<string>("IconName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("icon_name");
 
                     b.Property<bool>("IsExpenditure")
                         .HasColumnType("boolean")
@@ -189,8 +203,11 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                         new
                         {
                             Id = 1,
+                            Color = "black",
                             CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "description",
+                            IconAuthor = "test",
+                            IconName = "test",
                             IsExpenditure = false,
                             Name = "testCategory",
                             RoomId = 1,

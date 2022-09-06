@@ -18,27 +18,6 @@ public class PersonConfiguration : BaseEntityConfiguration<Person>
         builder.Property(p => p.Middlename).HasColumnName("middlename");
         builder.Property(p => p.GlobalRoleId).HasColumnName("global_role_id");
 
-        //builder.HasMany(u => u.Rooms)
-        //    .WithMany(r => r.Persons)
-        //    .UsingEntity<PersonRoom>(
-        //        j => j
-        //            .HasOne(pt => pt.Room)
-        //            .WithMany(t => t.PersonRooms)
-        //            .HasForeignKey(pt => pt.RoomId),
-        //        j => j
-        //            .HasOne(pt => pt.Person)
-        //            .WithMany(t => t.PersonRooms)
-        //            .HasForeignKey(pt => pt.PersonId),
-        //        j =>
-        //        {
-        //            j.HasKey(t => new { t.PersonId, t.RoomId });
-        //            j.ToTable("person_room");
-        //            j.Property(p => p.PersonId).HasColumnName("person_id");
-        //            j.Property(p => p.RoomId).HasColumnName("room_id");
-        //            j.Property(p => p.Role).HasColumnName("role");
-        //            j.HasDiscriminator<string>("descriminator");
-        //        });
-
         builder.HasData(new Person
         {
             Id = 1,

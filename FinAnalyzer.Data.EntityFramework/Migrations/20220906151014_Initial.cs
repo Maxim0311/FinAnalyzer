@@ -127,6 +127,9 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                     name = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
                     is_expenditure = table.Column<bool>(type: "boolean", nullable: false),
+                    icon_author = table.Column<string>(type: "text", nullable: false),
+                    icon_name = table.Column<string>(type: "text", nullable: false),
+                    color = table.Column<string>(type: "text", nullable: false),
                     room_id = table.Column<int>(type: "integer", nullable: false),
                     create_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     update_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
@@ -340,8 +343,8 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
 
             migrationBuilder.InsertData(
                 table: "category",
-                columns: new[] { "Id", "delete_date", "description", "is_expenditure", "name", "room_id" },
-                values: new object[] { 1, null, "description", false, "testCategory", 1 });
+                columns: new[] { "Id", "color", "delete_date", "description", "icon_author", "icon_name", "is_expenditure", "name", "room_id" },
+                values: new object[] { 1, "black", null, "description", "test", "test", false, "testCategory", 1 });
 
             migrationBuilder.InsertData(
                 table: "person",
