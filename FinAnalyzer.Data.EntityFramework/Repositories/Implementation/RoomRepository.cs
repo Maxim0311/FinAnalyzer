@@ -37,7 +37,7 @@ public class RoomRepository : BaseRepository<Room>, IRoomRepository
         return true;
     }
 
-    public async Task<PaginationResponse<Room>> GetAllAsync(PaginationRequest pagination)
+    public override async Task<PaginationResponse<Room>> GetAllAsync(PaginationRequest pagination)
     {
         var query = _context.Rooms.AsQueryable();
 

@@ -1,7 +1,6 @@
 ﻿using FinAnalyzer.Common;
 using FinAnalyzer.Core.Dto.Category;
 using FinAnalyzer.Core.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinAnalyzer.Web.Controllers
@@ -18,12 +17,22 @@ namespace FinAnalyzer.Web.Controllers
         }
 
         [HttpGet("{roomId}")]
-        public async Task<ActionResult<OperationResult<IEnumerable<CategoryResponse>>>>
-            GetAll(int roomId)
+        public async Task<ActionResult<OperationResult<IEnumerable<CategoryResponse>>>> GetAll(int roomId)
         {
             var result = await _categoryService.GetAllAsync(roomId);
 
             return Ok(result);
+        }
+
+        [HttpPost("create")]
+        public async Task<ActionResult<OperationResult<int>>> Create(CategoryCreateRequest categoryDto)
+        {
+            var result = await _categoryService.CreateAsync(categoryDto);
+
+            if (result.Success)
+                return Ok(result);
+
+            return BadRequest(result);
         }
     }
 }

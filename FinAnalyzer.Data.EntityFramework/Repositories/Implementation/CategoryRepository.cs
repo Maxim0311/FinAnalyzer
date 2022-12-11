@@ -10,7 +10,7 @@ public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
     {
     }
 
-    public async Task<IEnumerable<Category>> GetAllAsync(int roomId)
+    public async Task<IEnumerable<Category>> GetByRoomIdAsync(int roomId)
     {
         return await _context.Categories.Where(c => c.RoomId == roomId).ToListAsync();
     }

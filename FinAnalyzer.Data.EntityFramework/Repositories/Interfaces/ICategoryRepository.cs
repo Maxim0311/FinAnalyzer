@@ -4,5 +4,5 @@ namespace FinAnalyzer.Data.EntityFramework.Repositories.Interfaces;
 
 public interface ICategoryRepository : IBaseRepository<Category>
 {
-    Task<IEnumerable<Category>> GetAllAsync(int roomId);
+    Task<IEnumerable<Category>> GetByRoomIdAsync(int roomId);
 }

@@ -63,6 +63,40 @@ public class RoomService : IRoomService
             AccountTypeId = 1
         };
 
+        var categories = new Category[] 
+        {
+            new Category
+            {
+                Name = "Одежда",
+                IsExpenditure = true,
+                IconAuthor = "FontAwesome5",
+                IconName = "tshirt",
+                Color = "blue"
+            },
+            new Category
+            {
+                Name = "Автомобиль",
+                IconAuthor = "FontAwesome5",
+                IconName = "car",
+                Color = "black"
+            },
+            new Category
+            {
+                Name = "Продукты",
+                IconAuthor = "Feather",
+                IconName = "shopping-cart",
+                Color = "yellow"
+            },
+            new Category
+            {
+                Name = "Зарплата",
+                IconAuthor = "Entypo",
+                IconName = "credit-card",
+                Color = "green"
+            },
+        };
+
+        room.Categories.AddRange(categories);
         room.Accounts.Add(startPersonAccount);
         room.Accounts.Add(startRoomAccount);
 

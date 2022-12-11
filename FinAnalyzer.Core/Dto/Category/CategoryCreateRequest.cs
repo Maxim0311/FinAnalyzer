@@ -1,10 +1,9 @@
 ﻿namespace FinAnalyzer.Core.Dto.Category;
 
 #nullable disable
-
-public class CategoryResponse
+public class CategoryCreateRequest
 {
-    public int Id { get; set; }
+    public int RoomId { get; set; }
 
     public string Name { get; set; }
 
@@ -18,4 +17,3 @@ public class CategoryResponse
 
     public string Color { get; set; }
 }
-

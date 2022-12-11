@@ -6,6 +6,9 @@ public class Category : BaseEntity
 
     public string? Description { get; set; }
 
+    /// <summary>
+    /// true, если категория расходная
+    /// </summary>
     public bool IsExpenditure { get; set; }
 
     public string IconAuthor { get; set; }
