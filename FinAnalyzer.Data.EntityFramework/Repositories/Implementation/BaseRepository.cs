@@ -1,4 +1,5 @@
-﻿using FinAnalyzer.Data.EntityFramework.Repositories.Interfaces;
+﻿using FinAnalyzer.Common;
+using FinAnalyzer.Data.EntityFramework.Repositories.Interfaces;
 using FinAnalyzer.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,6 +31,25 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
         await _context.SaveChangesAsync();
         return true;
+    }
+
+    public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
+    {
+        return await _context.Set<TEntity>().ToListAsync();
+    }
+
+    public virtual async Task<PaginationResponse<TEntity>> GetAllAsync(PaginationRequest pagination)
+    {
+        var query = _context.Set<TEntity>().AsQueryable();
+
+        var totalCount = await query.CountAsync();
+        query = query.Skip(pagination.Skip).Take(pagination.Take);
+
+        return new PaginationResponse<TEntity>
+        {
+            Items = await query.ToListAsync(),
+            TotalCount = totalCount,
+        };
     }
 
     public virtual async Task<TEntity?> GetByIdAsync(int id)
