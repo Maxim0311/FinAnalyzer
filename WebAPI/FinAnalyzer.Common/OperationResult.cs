@@ -15,6 +15,9 @@ public class OperationResult
     //public static OperationResult Fail(OperationCode errorCode, string? message = null, string? stackTrace = null)
     //    => new OperationResult(errorCode, message, stackTrace);
 
+    public static OperationResult Fail(OperationCode errorCode, string? message = null, string? stackTrace = null)
+        => new(errorCode, message, stackTrace);
+
     public static OperationResult<T> Fail<T>(OperationCode errorCode, string? message = null, string? stackTrace = null)
         => new(errorCode, message, stackTrace);
 
