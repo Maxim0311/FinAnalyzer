@@ -1,8 +1,7 @@
 ﻿namespace FinAnalyzer.Core.Dto.Category;
 
 #nullable disable
-
-public class CategoryResponse
+public class CategoryUpdateRequest
 {
     public int Id { get; set; }
 

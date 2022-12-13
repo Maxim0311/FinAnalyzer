@@ -7,11 +7,24 @@ export interface ICategory {
   isExpenditure: boolean;
   iconAuthor: IconAuthor;
   iconName: string;
-  color: string;
+  iconColor: string;
 }
 
 export interface ICategoryCreate {
   name: string;
   description?: string;
   isExpenditure: boolean;
+  iconAuthor?: IconAuthor;
+  iconName: string;
+  iconColor: string;
+}
+
+export interface ICategoryUpdate {
+  id: number;
+  name: string;
+  description?: string;
+  isExpenditure: boolean;
+  iconAuthor?: IconAuthor;
+  iconName: string;
+  iconColor: string;
 }

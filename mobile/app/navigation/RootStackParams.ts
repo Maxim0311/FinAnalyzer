@@ -1,4 +1,4 @@
-import { ICategory } from '../api/interfaces/category';
+import { ICategoryUpdate } from '../api/interfaces/category';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -14,5 +14,5 @@ export type RootStackParamList = {
   Categories: undefined;
   CategoriesMain: undefined;
   CategoryCreate: undefined;
-  CategoryUpdate: ICategory;
+  CategoryUpdate: ICategoryUpdate;
 };

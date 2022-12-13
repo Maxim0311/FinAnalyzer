@@ -36,41 +36,97 @@ interface IIcon {
   size?: number;
   color?: string;
   style?: any;
+  key?: number;
 }
 
-const Icon: FC<IIcon> = ({ author, name, size, color, style }) => {
+const Icon: FC<IIcon> = ({ author, name, size, color, style, key }) => {
   switch (author) {
     case 'AntDesign':
-      return <AntDesign name={name} size={size} color={color} style={style} />;
+      return (
+        <AntDesign
+          key={key}
+          name={name}
+          size={size}
+          color={color}
+          style={style}
+        />
+      );
       break;
     case 'Entypo':
-      return <Entypo name={name} size={size} color={color} style={style} />;
+      return (
+        <Entypo key={key} name={name} size={size} color={color} style={style} />
+      );
       break;
     case 'Feather':
-      return <Feather name={name} size={size} color={color} style={style} />;
+      return (
+        <Feather
+          key={key}
+          name={name}
+          size={size}
+          color={color}
+          style={style}
+        />
+      );
       break;
     case 'FontAwesome':
       return (
-        <FontAwesome name={name} size={size} color={color} style={style} />
+        <FontAwesome
+          key={key}
+          name={name}
+          size={size}
+          color={color}
+          style={style}
+        />
       );
       break;
     case 'FontAwesome5':
       return (
-        <FontAwesome5 name={name} size={size} color={color} style={style} />
+        <FontAwesome5
+          key={key}
+          name={name}
+          size={size}
+          color={color}
+          style={style}
+        />
       );
       break;
     case 'Fontisto':
-      return <Fontisto name={name} size={size} color={color} style={style} />;
+      return (
+        <Fontisto
+          key={key}
+          name={name}
+          size={size}
+          color={color}
+          style={style}
+        />
+      );
       break;
     case 'Foundation':
-      return <Foundation name={name} size={size} color={color} style={style} />;
+      return (
+        <Foundation
+          key={key}
+          name={name}
+          size={size}
+          color={color}
+          style={style}
+        />
+      );
       break;
     case 'Ionicons':
-      return <Ionicons name={name} size={size} color={color} style={style} />;
+      return (
+        <Ionicons
+          key={key}
+          name={name}
+          size={size}
+          color={color}
+          style={style}
+        />
+      );
       break;
     case 'MaterialCommunityIcons':
       return (
         <MaterialCommunityIcons
+          key={key}
           name={name}
           size={size}
           color={color}
@@ -80,19 +136,41 @@ const Icon: FC<IIcon> = ({ author, name, size, color, style }) => {
       break;
     case 'MaterialIcons':
       return (
-        <MaterialIcons name={name} size={size} color={color} style={style} />
+        <MaterialIcons
+          key={key}
+          name={name}
+          size={size}
+          color={color}
+          style={style}
+        />
       );
       break;
     case 'Octicons':
-      return <Octicons name={name} size={size} color={color} style={style} />;
+      return (
+        <Octicons
+          key={key}
+          name={name}
+          size={size}
+          color={color}
+          style={style}
+        />
+      );
       break;
     case 'SimpleLineIcons':
       return (
-        <SimpleLineIcons name={name} size={size} color={color} style={style} />
+        <SimpleLineIcons
+          key={key}
+          name={name}
+          size={size}
+          color={color}
+          style={style}
+        />
       );
       break;
     case 'Zocial':
-      return <Zocial name={name} size={size} color={color} style={style} />;
+      return (
+        <Zocial key={key} name={name} size={size} color={color} style={style} />
+      );
       break;
     default:
       return <Text>?</Text>;

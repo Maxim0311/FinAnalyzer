@@ -8,5 +8,9 @@ public interface ICategoryService
     Task<OperationResult<IEnumerable<CategoryResponse>>> GetAllAsync(int roomId);
 
     Task<OperationResult<int>> CreateAsync(CategoryCreateRequest request);
+
+    Task<OperationResult> UpdateAsync(CategoryUpdateRequest categoryDto);
+
+    Task<OperationResult> DeleteAsync(int id);
 }
 

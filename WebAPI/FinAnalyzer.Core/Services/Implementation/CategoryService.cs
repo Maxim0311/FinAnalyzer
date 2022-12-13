@@ -37,5 +37,21 @@ public class CategoryService : ICategoryService
         var response = _mapper.Map<IEnumerable<CategoryResponse>>(categories);
         return OperationResult.Ok(response);
     }
+
+    public async Task<OperationResult> UpdateAsync(CategoryUpdateRequest categoryDto)
+    {
+        var category = _mapper.Map<Category>(categoryDto);
+        if (await _categoryRepository.UpdateAsync(category))
+            return OperationResult.OK;
+
+        return OperationResult.Fail(OperationCode.EntityWasNotFound, "Категория не найдена");
+    }
+    public async Task<OperationResult> DeleteAsync(int id)
+    {
+        if (await _categoryRepository.DeleteAsync(id))
+            return OperationResult.OK;
+
+        return OperationResult.Fail(OperationCode.EntityWasNotFound, "Категория не найдена");
+    }
 }
 

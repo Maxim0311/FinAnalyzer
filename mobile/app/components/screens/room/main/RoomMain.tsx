@@ -16,6 +16,9 @@ const RoomMain: FC<IRoomMain> = ({ route }) => {
 
   return (
     <View>
+      <Pressable onPress={() => navigation.navigate('Categories')}>
+        <Text>ROOM MAIN</Text>
+      </Pressable>
       <Pressable onPress={() => navigation.navigate('Transactions')}>
         <Text>{roomId && roomId}</Text>
       </Pressable>

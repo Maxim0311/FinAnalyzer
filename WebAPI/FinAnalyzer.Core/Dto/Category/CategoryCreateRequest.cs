@@ -15,5 +15,5 @@ public class CategoryCreateRequest
 
     public string IconName { get; set; }
 
-    public string Color { get; set; }
+    public string IconColor { get; set; }
 }

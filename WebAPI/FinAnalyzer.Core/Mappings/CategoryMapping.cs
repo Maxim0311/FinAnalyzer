@@ -8,7 +8,11 @@ public class CategoryMapping : Profile
 {
     public CategoryMapping()
     {
-        CreateMap<Category, CategoryResponse>();
-        CreateMap<CategoryCreateRequest, Category>();
+        CreateMap<Category, CategoryResponse>()
+            .ForMember(dest => dest.IconColor, opt => opt.MapFrom(src => src.Color));
+        CreateMap<CategoryUpdateRequest, Category>()
+            .ForMember(dest => dest.Color, opt => opt.MapFrom(src => src.IconColor));
+        CreateMap<CategoryCreateRequest, Category>()
+            .ForMember(dest => dest.Color, opt => opt.MapFrom(src => src.IconColor));
     }
 }

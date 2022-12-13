@@ -34,5 +34,25 @@ namespace FinAnalyzer.Web.Controllers
 
             return BadRequest(result);
         }
+
+        [HttpPut("update")]
+        public async Task<ActionResult<OperationResult>> Update(CategoryUpdateRequest categoryDto)
+        {
+            var result = await _categoryService.UpdateAsync(categoryDto);
+            if (result.Success)
+                return Ok(result);
+
+            return BadRequest(result);
+        }
+
+        [HttpDelete("delete/{id}")]
+        public async Task<ActionResult<OperatingSystem>> Delete(int id)
+        {
+            var result = await _categoryService.DeleteAsync(id);
+            if (result.Success)
+                return Ok(result);
+
+            return BadRequest(result);
+        }
     }
 }

@@ -36,6 +36,8 @@ const Categories = () => {
   const [search, setSearch] = useState('');
 
   const categoryClickHandler = (id: number) => {
+    console.log(categories);
+
     setCurrentCat(categories[id]);
     setModalVisible(true);
   };
@@ -104,7 +106,7 @@ const Categories = () => {
                   iconAuthor={item.iconAuthor}
                   iconName={item.iconName}
                   text={item.name}
-                  color={item.color}
+                  iconColor={item.iconColor}
                   onPress={() => categoryClickHandler(index)}
                 />
               ))}
