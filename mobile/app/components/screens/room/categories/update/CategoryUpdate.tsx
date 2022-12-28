@@ -7,11 +7,7 @@ import CheckBox from '../../../../ui/CheckBox';
 import Field from '../../../../ui/Field';
 import { icons, IIconCreate } from '../create/icons';
 import { HsvColor } from 'react-native-color-picker/dist/typeHelpers';
-import {
-  ICategory,
-  ICategoryCreate,
-  ICategoryUpdate,
-} from '../../../../../api/interfaces/category';
+import { ICategoryUpdate } from '../../../../../api/interfaces/category';
 import Button from '../../../../ui/Button';
 import Icon from '../../../../ui/Icon';
 import Error from '../../../../ui/Error';

@@ -1,8 +1,10 @@
-﻿using FinAnalyzer.Common;
+﻿using AutoMapper;
+using FinAnalyzer.Common;
 using FinAnalyzer.Core.Dto.Transaction;
 using FinAnalyzer.Core.Services.Interfaces;
 using FinAnalyzer.Data.EntityFramework.Repositories.Interfaces;
 using FinAnalyzer.Domain.Entities;
+using StafferyInternal.StafferyInternal.Common;
 
 namespace FinAnalyzer.Core.Services.Implementation;
 
@@ -10,11 +12,13 @@ public class TransactionService : ITransactionService
 {
     private readonly IAccountRepository _accountRepository;
     private readonly ITransactionRepository _transactionRepository;
+    private readonly IMapper _mapper;
 
-    public TransactionService(IAccountRepository accountRepository, ITransactionRepository transactionRepository)
+    public TransactionService(IAccountRepository accountRepository, ITransactionRepository transactionRepository, IMapper mapper)
     {
         _accountRepository = accountRepository;
         _transactionRepository = transactionRepository;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -46,7 +50,7 @@ public class TransactionService : ITransactionService
         };
 
         if (!await _accountRepository.IsExistAsync(transactionDto.Destination))
-            return OperationResult.Fail(StafferyInternal.StafferyInternal.Common.OperationCode.Error, "Счёта получателя не существует");
+            return OperationResult.Fail(OperationCode.Error, "Счёта получателя не существует");
 
         await _accountRepository.DepositMoney(transactionDto.Destination, transaction.Amount);
         await _transactionRepository.CreateAsync(transaction);
@@ -83,12 +87,12 @@ public class TransactionService : ITransactionService
         };
 
         if (!await _accountRepository.IsExistAsync(transactionDto.Sender))
-            return OperationResult.Fail(StafferyInternal.StafferyInternal.Common.OperationCode.Error, "Счёта получателя не существует");
+            return OperationResult.Fail(OperationCode.Error, "Счёта получателя не существует");
 
         var isSuccess = await _accountRepository.WithdrowMoney(transactionDto.Sender, transaction.Amount);
 
         if (!isSuccess)
-            return OperationResult.Fail(StafferyInternal.StafferyInternal.Common.OperationCode.Error, "Недостаточно средств");
+            return OperationResult.Fail(OperationCode.Error, "Недостаточно средств");
 
         await _transactionRepository.CreateAsync(transaction);
 
@@ -104,7 +108,7 @@ public class TransactionService : ITransactionService
     {
         var isSuccess = await _accountRepository.TransactMoney(transactionDto.Sender, transactionDto.Destination, transactionDto.Amount);
         if (!isSuccess)
-            return OperationResult.Fail(StafferyInternal.StafferyInternal.Common.OperationCode.Error, "Недостаточно средств");
+            return OperationResult.Fail(OperationCode.Error, "Недостаточно средств");
 
         var transaction = new Transaction()
         {
@@ -122,6 +126,18 @@ public class TransactionService : ITransactionService
         await _transactionRepository.CreateAsync(transaction);
 
         return OperationResult.Ok();
+    }
+
+    public async Task<OperationResult<IEnumerable<TransactionResponse>>> GetAllTransactions(int roomId)
+    {
+        var transactions = await _transactionRepository.GetByRoomIdAsync(roomId);
+        var response = _mapper.Map<IEnumerable<TransactionResponse>>(transactions);
+        if (transactions.Any() && transactions != null)
+        {
+            return OperationResult.Ok(response);
+        }
+
+        return OperationResult<IEnumerable<TransactionResponse>>.Fail(OperationCode.EntityWasNotFound, "Не найдено ни одной операции");
     }
 }
 

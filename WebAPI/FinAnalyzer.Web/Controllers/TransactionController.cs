@@ -16,6 +16,16 @@ namespace FinAnalyzer.Web.Controllers
             _transactionService = transactionService;
         }
 
+        [HttpGet("{roomId}")]
+        public async Task<IActionResult> GetAllTransactions(int roomId)
+        {
+            var result = await _transactionService.GetAllTransactions(roomId);
+            if (result.Success)
+                return Ok(result);
+
+            return BadRequest(result);
+        }
+
         /// <summary>
         /// Добавить доход
         /// </summary>

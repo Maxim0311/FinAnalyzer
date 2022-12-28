@@ -11,5 +11,6 @@ public interface ITransactionService
     Task<OperationResult> MakeExpendTransaction(TransactionExpendCreateRequest transactionDto);
 
     Task<OperationResult> MakePersonTransaction(TransactionPersonCreateRequest transactionDto);
-}
 
+    Task<OperationResult<IEnumerable<TransactionResponse>>> GetAllTransactions(int roomId);
+}

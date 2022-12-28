@@ -9,5 +9,6 @@ namespace FinAnalyzer.Data.EntityFramework.Repositories.Interfaces
 {
     public interface ITransactionRepository : IBaseRepository<Transaction>
     {
+        Task<IEnumerable<Transaction>> GetByRoomIdAsync(int roomId);
     }
 }

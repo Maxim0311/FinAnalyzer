@@ -17,10 +17,12 @@ import Icon from '../../../../ui/Icon';
 import { ColorPicker, fromHsv } from 'react-native-color-picker';
 import { HsvColor } from 'react-native-color-picker/dist/typeHelpers';
 import { icons, IIconCreate } from './icons';
+import { useNavigation } from '@react-navigation/native';
 
 const CategoryCreate: FC = () => {
-  const { error, clearError, isLoading, createCategory } = useCategoryService();
-
+  const { error, clearError, isLoading, createCategory, getAllCategories } =
+    useCategoryService();
+  const navigation = useNavigation();
   const [data, setData] = useState<ICategoryCreate>({
     name: '',
     isExpenditure: true,
@@ -34,9 +36,14 @@ const CategoryCreate: FC = () => {
 
   const [colorInModal, setColorInModal] = useState('');
 
-  const categoryCreateHandler = () => {
+  const categoryCreateHandler = async () => {
     clearError();
-    createCategory(data);
+    const result = await createCategory(data);
+
+    if (result) {
+      await getAllCategories();
+      navigation.navigate('CategoriesMain');
+    }
   };
 
   const iconPressHanldler = (icon: IIconCreate) => {
