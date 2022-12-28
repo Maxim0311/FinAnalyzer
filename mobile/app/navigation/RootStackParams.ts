@@ -9,8 +9,15 @@ export type RootStackParamList = {
   Room: undefined;
   RoomMain: undefined;
   Transactions: undefined;
+  TransactionsMain: undefined;
+  TransactionsCreate: undefined;
+  IncomeTransactionsCreate: undefined;
+  ExpendTransactionsCreate: undefined;
+  PersonTransactionsCreate: undefined;
   Settings: undefined;
   Accounts: undefined;
+  AccountsCreate: undefined;
+  AccountsMain: undefined;
   Categories: undefined;
   CategoriesMain: undefined;
   CategoryCreate: undefined;

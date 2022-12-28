@@ -82,6 +82,8 @@ export const AuthProvider: FC = ({ children }) => {
         await SecureStore.setItemAsync('token', data.result!.token);
       }
     } catch (e: any) {
+      console.log(e);
+
       setError(e?.response?.data?.message);
     } finally {
       setIsLoading(false);

@@ -42,8 +42,6 @@ const CategoryUpdate: FC<ICategoryUpdateProps> = ({ route }) => {
   const [colorInModal, setColorInModal] = useState(route.params.iconColor);
 
   const categoryUpdateHandler = async () => {
-    console.log('TEST');
-
     clearError();
     const result = await updateCategory(data);
     if (result) {

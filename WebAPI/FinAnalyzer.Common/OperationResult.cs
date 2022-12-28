@@ -23,6 +23,8 @@ public class OperationResult
 
     public static OperationResult<T> Ok<T>(T result) => new(result);
 
+    public static OperationResult Ok() => new();
+
     protected OperationResult()
     {
     }

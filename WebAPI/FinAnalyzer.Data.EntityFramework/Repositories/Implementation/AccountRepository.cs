@@ -11,7 +11,7 @@ public class AccountRepository : BaseRepository<Account>, IAccountRepository
     {
     }
 
-    public async Task<PaginationResponse<Account>> GetAllAsync(PaginationRequest pagination)
+    public override async Task<PaginationResponse<Account>> GetAllAsync(PaginationRequest pagination)
     {
         var query = _context.Accounts.AsQueryable();
 
@@ -31,6 +31,22 @@ public class AccountRepository : BaseRepository<Account>, IAccountRepository
         };
     }
 
+    public async Task<IEnumerable<Account>> GetAllByRoom(int roomId)
+    {
+        return await _context.Accounts
+            .Include(x => x.AccountType)
+            .Include(x => x.Person)
+            .Where(x => x.RoomId == roomId).ToListAsync();
+    }
+
+    public async Task<IEnumerable<Account>> GetByPerson(int roomId, int personId)
+    {
+        return await _context.Accounts
+            .Include(x => x.AccountType)
+            .Include(x => x.Person)
+            .Where(x => x.RoomId == roomId && x.PersonId == personId).ToListAsync();
+    }
+
     public async Task<bool> UpdateAsync(Account account)
     {
         var updatedAccount = await GetByIdAsync(account.Id);
@@ -39,6 +55,42 @@ public class AccountRepository : BaseRepository<Account>, IAccountRepository
 
         updatedAccount.Name = account.Name;
 
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task DepositMoney(int accountId, decimal amount)
+    {
+        var account = await _context.Accounts.FindAsync(accountId);
+        if (account != null)
+        {
+            account.Balance += amount;
+        }
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<bool> WithdrowMoney(int accountId, decimal amount)
+    {
+        var account = await _context.Accounts.FindAsync(accountId);
+
+        if (account == null || account.Balance < amount)
+            return false;
+
+        account.Balance -= amount;
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> TransactMoney(int senderId, int destinationId, decimal amount)
+    {
+        var sender = await _context.Accounts.FindAsync(senderId);
+        var destination = await _context.Accounts.FindAsync(destinationId);
+
+        if (sender == null || destination == null || sender.Balance < amount)
+            return false;
+
+        sender.Balance -= amount;
+        destination.Balance += amount;
         await _context.SaveChangesAsync();
         return true;
     }

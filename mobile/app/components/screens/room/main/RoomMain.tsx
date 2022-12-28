@@ -2,6 +2,7 @@ import { View, Text, Pressable } from 'react-native';
 import React, { FC, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useRoom } from '../../../../providers/RoomProvider';
+import Button from '../../../ui/Button';
 
 interface IRoomMain {
   route: any;

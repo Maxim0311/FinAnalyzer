@@ -22,6 +22,11 @@ import Header from '../components/layout/header/Header';
 import Categories from '../components/screens/room/categories/Categories';
 import CategoryCreate from '../components/screens/room/categories/create/CategoryCreate';
 import CategoryUpdate from '../components/screens/room/categories/update/CategoryUpdate';
+import AccountCreate from '../components/screens/room/accounts/create/AccountCreate';
+import TransactionsCreate from '../components/screens/room/transactions/create/TransactionsCreate';
+import IncomeTransactionsCreate from '../components/screens/room/transactions/create/IncomeTransactionsCreate';
+import ExpendTransactionsCreate from '../components/screens/room/transactions/create/ExpendTransactionsCreate';
+import PersonTransactionsCreate from '../components/screens/room/transactions/create/PersonTransactionsCreate';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -78,7 +83,7 @@ const Room = () => {
       />
       <Tab.Screen
         name="Transactions"
-        component={Transactions}
+        component={TransactionsStack}
         options={{
           title: 'Операции',
           tabBarIcon: ({ size, color }) => (
@@ -88,7 +93,7 @@ const Room = () => {
       />
       <Tab.Screen
         name="Accounts"
-        component={Accounts}
+        component={AccountStack}
         options={{
           title: 'Счета',
           tabBarIcon: ({ size, color }) => (
@@ -136,4 +141,42 @@ const CategoryStack = () => {
   );
 };
 
+const AccountStack = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="AccountsMain" component={Accounts}></Stack.Screen>
+      <Stack.Screen
+        name="AccountsCreate"
+        component={AccountCreate}
+      ></Stack.Screen>
+    </Stack.Navigator>
+  );
+};
+
+const TransactionsStack = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen
+        name="TransactionsMain"
+        component={Transactions}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="TransactionsCreate"
+        component={TransactionsCreate}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="IncomeTransactionsCreate"
+        component={IncomeTransactionsCreate}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="ExpendTransactionsCreate"
+        component={ExpendTransactionsCreate}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="PersonTransactionsCreate"
+        component={PersonTransactionsCreate}
+      ></Stack.Screen>
+    </Stack.Navigator>
+  );
+};
 export default Navigation;

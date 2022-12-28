@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace FinAnalyzer.Data.EntityFramework.Migrations
 {
-    public partial class Initial : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -125,7 +125,7 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     name = table.Column<string>(type: "text", nullable: false),
-                    description = table.Column<string>(type: "text", nullable: false),
+                    description = table.Column<string>(type: "text", nullable: true),
                     is_expenditure = table.Column<bool>(type: "boolean", nullable: false),
                     icon_author = table.Column<string>(type: "text", nullable: false),
                     icon_name = table.Column<string>(type: "text", nullable: false),
@@ -251,13 +251,13 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     name = table.Column<string>(type: "text", nullable: false),
-                    description = table.Column<string>(type: "text", nullable: false),
+                    description = table.Column<string>(type: "text", nullable: true),
                     amount = table.Column<decimal>(type: "numeric", nullable: false),
                     transaction_type_id = table.Column<int>(type: "integer", nullable: false),
-                    CategoryId = table.Column<int>(type: "integer", nullable: false),
+                    category_id = table.Column<int>(type: "integer", nullable: true),
                     destination_id = table.Column<int>(type: "integer", nullable: false),
                     sender_id = table.Column<int>(type: "integer", nullable: false),
-                    room_id = table.Column<int>(type: "integer", nullable: false),
+                    room_id = table.Column<int>(type: "integer", nullable: true),
                     create_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     update_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     delete_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -278,17 +278,15 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_transactions_category_CategoryId",
-                        column: x => x.CategoryId,
+                        name: "FK_transactions_category_category_id",
+                        column: x => x.category_id,
                         principalTable: "category",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_transactions_room_room_id",
                         column: x => x.room_id,
                         principalTable: "room",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_transactions_transaction_type_transaction_type_id",
                         column: x => x.transaction_type_id,
@@ -397,9 +395,9 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                 column: "room_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_transactions_CategoryId",
+                name: "IX_transactions_category_id",
                 table: "transactions",
-                column: "CategoryId");
+                column: "category_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_transactions_destination_id",

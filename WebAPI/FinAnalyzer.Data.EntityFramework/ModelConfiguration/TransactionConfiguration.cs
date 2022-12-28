@@ -16,6 +16,7 @@ public class TransactionConfiguration : BaseEntityConfiguration<Transaction>
         builder.Property(p => p.Description).HasColumnName("description");
         builder.Property(p => p.TransactionTypeId).HasColumnName("transaction_type_id");
         builder.Property(p => p.DestinationId).HasColumnName("destination_id");
+        builder.Property(p => p.CategoryId).HasColumnName("category_id");
         builder.Property(p => p.SenderId).HasColumnName("sender_id");
         builder.Property(p => p.RoomId).HasColumnName("room_id");
     }

@@ -13,8 +13,10 @@ public static class FinAnalyserDI
             .AddScoped<IRoomRepository, RoomRepository>()
             .AddScoped<IPersonRepository, PersonRepository>()
             .AddScoped<IAccountRepository, AccountRepository>()
+            .AddScoped<IAccountTypeRepository, AccountTypeRepository>()
             .AddScoped<IGlobalRoleRepository, GlobalRoleRepository>()
             .AddScoped<IPersonRoomRepository, PersonRoomRepository>()
+            .AddScoped<ITransactionRepository, TransactionRepository>()
             .AddScoped<ICategoryRepository, CategoryRepository>();
     }
 
@@ -23,7 +25,9 @@ public static class FinAnalyserDI
         return services
             .AddScoped<IRoomService, RoomService>()
             .AddScoped<IAuthService, AuthService>()
-            .AddScoped<ICategoryService, CategoryService>();
+            .AddScoped<ICategoryService, CategoryService>()
+            .AddScoped<ITransactionService, TransactionService>()
+            .AddScoped<IAccountService, AccountService>();
     }
 
     public static IServiceCollection AddValidatorsDI(this IServiceCollection services)

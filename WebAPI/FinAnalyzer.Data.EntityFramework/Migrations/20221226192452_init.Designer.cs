@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FinAnalyzer.Data.EntityFramework.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220906154638_UpdateTableCategories")]
-    partial class UpdateTableCategories
+    [Migration("20221226192452_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -521,8 +521,9 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("amount");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("integer");
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("integer")
+                        .HasColumnName("category_id");
 
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
@@ -535,7 +536,6 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                         .HasColumnName("delete_date");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
 
@@ -548,7 +548,7 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<int>("RoomId")
+                    b.Property<int?>("RoomId")
                         .HasColumnType("integer")
                         .HasColumnName("room_id");
 
@@ -735,9 +735,7 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                 {
                     b.HasOne("FinAnalyzer.Domain.Entities.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoryId");
 
                     b.HasOne("FinAnalyzer.Domain.Entities.Account", "Destination")
                         .WithMany()
@@ -747,9 +745,7 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
 
                     b.HasOne("FinAnalyzer.Domain.Entities.Room", "Room")
                         .WithMany("Transactions")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoomId");
 
                     b.HasOne("FinAnalyzer.Domain.Entities.Account", "Sender")
                         .WithMany()

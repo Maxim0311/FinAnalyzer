@@ -7,7 +7,7 @@ using StafferyInternal.StafferyInternal.Common;
 
 namespace FinAnalyzer.Web.Controllers;
 
-[Authorize]
+//[Authorize]
 [Route("api/rooms")]
 [ApiController]
 public class RoomController : ControllerBase
@@ -83,8 +83,8 @@ public class RoomController : ControllerBase
     {
         var jwt = Request.Headers["Authorization"];
 
-        if (!_authService.IsPersonId(jwt, personId))
-            return Forbid();
+        //if (!_authService.IsPersonId(jwt, personId))
+        //    return Forbid();
 
         var pagination = new PaginationRequest
         {
@@ -114,8 +114,8 @@ public class RoomController : ControllerBase
     {
         var jwt = Request.Headers["Authorization"];
 
-        if (!_authService.IsPersonId(jwt, request.PersonId))
-            return Forbid();
+        //if (!_authService.IsPersonId(jwt, request.PersonId))
+        //    return Forbid();
 
         var result = await _roomService.CreateAsync(request);
 
@@ -135,8 +135,8 @@ public class RoomController : ControllerBase
     {
         var jwt = Request.Headers["Authorization"];
 
-        if (!await _authService.CheckRoomPermissionAsync(jwt, request.Id, 2))
-            return Forbid();
+        //if (!await _authService.CheckRoomPermissionAsync(jwt, request.Id, 2))
+        //    return Forbid();
 
         var result = await _roomService.UpdateAsync(request);
 
@@ -156,8 +156,8 @@ public class RoomController : ControllerBase
     {
         var jwt = Request.Headers["Authorization"];
 
-        if (!await _authService.CheckRoomPermissionAsync(jwt, id, 1))
-            return Forbid();
+        //if (!await _authService.CheckRoomPermissionAsync(jwt, id, 1))
+        //    return Forbid();
 
         var result = await _roomService.DeleteAsync(id);
 

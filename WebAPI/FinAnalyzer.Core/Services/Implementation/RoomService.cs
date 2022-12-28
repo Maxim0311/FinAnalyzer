@@ -11,16 +11,19 @@ public class RoomService : IRoomService
 {
     private readonly IRoomRepository _roomRepository;
     private readonly IPersonRepository _personRepository;
+    private readonly IAccountRepository _accountRepository;
     private readonly IMapper _mapper;
 
     public RoomService(
-        IRoomRepository roomRepository, 
-        IMapper mapper, 
-        IPersonRepository personRepository)
+        IRoomRepository roomRepository,
+        IMapper mapper,
+        IPersonRepository personRepository, 
+        IAccountRepository accountRepository)
     {
         _roomRepository = roomRepository;
         _mapper = mapper;
         _personRepository = personRepository;
+        _accountRepository = accountRepository;
     }
 
     public async Task<OperationResult<int>> CreateAsync(RoomCreateRequest request)
