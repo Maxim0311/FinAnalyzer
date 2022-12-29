@@ -19,5 +19,7 @@ public class TransactionResponse
     public AccountResponse Sender { get; set; }
 
     public AccountResponse Destination { get; set; }
+
+    public DateTime CreateDate { get; set; }
 }
 

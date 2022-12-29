@@ -1,3 +1,5 @@
+import { IAccount } from './account';
+import { ICategory } from './category';
 interface ITransactionCreate {
   name: string;
   description?: string;
@@ -19,4 +21,16 @@ export interface IExpendTransaction extends ITransactionCreate {
 export interface IPersonTransaction extends ITransactionCreate {
   sender: number;
   destination: number;
+}
+
+export interface ITransaction {
+  id: number;
+  name: string;
+  description: string;
+  amount: number;
+  transactionTypeId: number;
+  category: ICategory;
+  sender: IAccount;
+  destination: IAccount;
+  createDate: string;
 }

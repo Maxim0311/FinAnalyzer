@@ -25,7 +25,7 @@ const AccountCreate: FC = () => {
 
     if (result) {
       Alert.alert('Счёт успешно создан');
-      navigation.navigate('Accounts');
+      navigation.navigate('AccountsMain');
     }
   };
 

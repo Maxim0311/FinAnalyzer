@@ -12,6 +12,7 @@ import {
   IExpendTransaction,
   IIncomeTransaction,
   IPersonTransaction,
+  ITransaction,
 } from '../interfaces/transaction';
 import { useAuth } from '../../hooks/useAuth';
 import { useRoom } from '../../providers/RoomProvider';
@@ -25,9 +26,11 @@ interface IContext {
   //   accounts: IAccount[];
   clearError: () => void;
   //   getAllAccounts: () => Promise<boolean>;
+  transactions: ITransaction[];
   makeIncomeTransaction: (transaction: IIncomeTransaction) => Promise<boolean>;
   makeExpendTransaction: (transaction: IExpendTransaction) => Promise<boolean>;
   makePersonTransaction: (transaction: IPersonTransaction) => Promise<boolean>;
+  getAllTransactions: () => Promise<boolean>;
 }
 
 const TransactionServiceContext = createContext<IContext>({} as IContext);
@@ -40,7 +43,7 @@ export const TransactionServiceProvider: FC = ({ children }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>();
-
+  const [transactions, setTransactions] = useState<ITransaction[]>();
   //   const [accounts, setAccounts] = useState<IAccount[]>(null);
 
   const clearError = () => setError(null);
@@ -48,6 +51,38 @@ export const TransactionServiceProvider: FC = ({ children }) => {
   useEffect(() => {
     getToken().then(jwt => setToken(jwt));
   }, []);
+
+  const getAllTransactions = async () => {
+    try {
+      setIsLoading(true);
+
+      const { data } = await axios.get<IOperationResult<ITransaction[]>>(
+        `${API_URL}/transaction/${roomId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (data.success) {
+        setTransactions(data.result);
+        return true;
+      } else {
+        setError(data.message);
+        return false;
+      }
+    } catch (e: any) {
+      if (e.response?.status === 403) {
+        setError('У вас недостаточно прав');
+      } else {
+        setError(e.response?.data?.message);
+      }
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const makeIncomeTransaction = async (transaction: IIncomeTransaction) => {
     try {
@@ -151,9 +186,11 @@ export const TransactionServiceProvider: FC = ({ children }) => {
       error,
       setError,
       clearError,
+      transactions,
       makeIncomeTransaction,
       makeExpendTransaction,
       makePersonTransaction,
+      getAllTransactions,
     }),
     [isLoading, error]
   );
