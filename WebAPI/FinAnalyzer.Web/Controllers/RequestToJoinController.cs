@@ -1,4 +1,9 @@
-﻿using FinAnalyzer.Data.EntityFramework.Repositories.Interfaces;
+﻿using AutoMapper;
+using FinAnalyzer.Common;
+using FinAnalyzer.Core.Dto;
+using FinAnalyzer.Core.Dto.Person;
+using FinAnalyzer.Data.EntityFramework.Repositories.Interfaces;
+using FinAnalyzer.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinAnalyzer.Web.Controllers;
@@ -9,15 +14,27 @@ public class RequestToJoinController : ControllerBase
 {
     private readonly IRequestToJoinRepository _repository;
 
-    public RequestToJoinController(IRequestToJoinRepository repository)
+    private readonly IMapper _mapper;
+
+    public RequestToJoinController(IRequestToJoinRepository repository, IMapper mapper)
     {
         _repository = repository;
+        _mapper = mapper;
     }
 
     [HttpGet("{roomId}")]
     public async Task<IActionResult> GetAll(int roomId)
     {
-        return Ok(await _repository.GetAllAsync(roomId));
+        var response = await _repository.GetAllAsync(roomId);
+        return Ok(OperationResult.Ok(response.Where(x => x.Status == RequestToJoinStatus.New).Select(x => new RequestToJoinResponse
+        {
+            Id =x.Id,
+            Person = _mapper.Map<PersonResponse>(x.Person),
+            RoomId = x.RoomId,
+            Status = x.Status,
+            DateTime = x.CreateDate,
+
+        })));
     }
 
     [HttpGet("apply")]

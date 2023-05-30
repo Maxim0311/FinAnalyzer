@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using FinAnalyzer.Common;
+using FinAnalyzer.Core.Dto.Person;
 using FinAnalyzer.Core.Services.Interfaces;
+using FinAnalyzer.Data.EntityFramework;
 using FinAnalyzer.Data.EntityFramework.Repositories.Interfaces;
 using FinAnalyzer.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using StafferyInternal.StafferyInternal.Common;
 
 namespace FinAnalyzer.Core.Services.Implementation;
@@ -12,18 +15,21 @@ public class RoomService : IRoomService
     private readonly IRoomRepository _roomRepository;
     private readonly IPersonRepository _personRepository;
     private readonly IAccountRepository _accountRepository;
+    private readonly AppDbContext _context;
     private readonly IMapper _mapper;
 
     public RoomService(
         IRoomRepository roomRepository,
         IMapper mapper,
-        IPersonRepository personRepository, 
-        IAccountRepository accountRepository)
+        IPersonRepository personRepository,
+        IAccountRepository accountRepository,
+        AppDbContext context)
     {
         _roomRepository = roomRepository;
         _mapper = mapper;
         _personRepository = personRepository;
         _accountRepository = accountRepository;
+        _context = context;
     }
 
     public async Task<OperationResult<int>> CreateAsync(RoomCreateRequest request)
@@ -42,11 +48,14 @@ public class RoomService : IRoomService
                 OperationCode.EntityWasNotFound,
                 "Пользователь не найден");
 
+        var roomRole = await _context.RoomRoles.FindAsync(1);
+
         var personRoom = new PersonRoom
         {
             Room = room,
             Person = person,
-            RoomRoleId = 1
+            RoomRoleId = 1,
+            RoomRole = roomRole
         };
 
         room.PersonRooms.Add(personRoom);
@@ -79,6 +88,7 @@ public class RoomService : IRoomService
             new Category
             {
                 Name = "Автомобиль",
+                IsExpenditure = true,
                 IconAuthor = "FontAwesome5",
                 IconName = "car",
                 Color = "black"
@@ -86,6 +96,7 @@ public class RoomService : IRoomService
             new Category
             {
                 Name = "Продукты",
+                IsExpenditure = true,
                 IconAuthor = "Feather",
                 IconName = "shopping-cart",
                 Color = "yellow"
@@ -93,6 +104,7 @@ public class RoomService : IRoomService
             new Category
             {
                 Name = "Зарплата",
+                IsExpenditure = false,
                 IconAuthor = "Entypo",
                 IconName = "credit-card",
                 Color = "green"
@@ -174,6 +186,25 @@ public class RoomService : IRoomService
         return OperationResult<int>.Fail(
                 OperationCode.EntityWasNotFound,
                 "Комната не найдена");
+    }
+
+    public async Task<OperationResult<IEnumerable<PersonResponse>>> GetPersonsByRoom(int roomId)
+    {
+        var persons = await _personRepository.GetByRoomId(roomId);
+        var response = persons.Select(x =>
+        {
+            var role = _personRepository.GetRoomRole(x.Id, roomId);
+            return new PersonResponse
+            {
+                Id = x.Id,
+                Login = x.Login,
+                Firstname = x.Firstname,
+                Lastname = x.Lastname,
+                Middlename = x.Middlename,
+                RoomRole = role.Result
+            };
+        });
+        return OperationResult.Ok(response);
     }
 }
 

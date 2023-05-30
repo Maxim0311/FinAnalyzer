@@ -18,20 +18,29 @@ public class RequestToJoinRepository : IRequestToJoinRepository
     {
         var request = new RequestToJoin
         {
-            CreateDate = DateTime.Now,
+            CreateDate = DateTime.UtcNow,
             PersonId = personId,
             RoomId = roomId,
             Status = RequestToJoinStatus.New
         };
 
         await _context.RequestsToJoin.AddAsync(request);
+        await _context.SaveChangesAsync();
     }
 
     /// <inheritdoc/>
     public async Task Accept(int requestId)
     {
         var request = await Get(requestId);
+        var personRooms = new PersonRoom
+        {
+            PersonId = request.PersonId,
+            RoomId = request.RoomId,
+            RoomRoleId = 3
+        };
+        await _context.PersonRooms.AddAsync(personRooms);
         request.Status = RequestToJoinStatus.Accepted;
+        await _context.SaveChangesAsync();
     }
 
     /// <inheritdoc/>
@@ -39,12 +48,13 @@ public class RequestToJoinRepository : IRequestToJoinRepository
     {
         var request = await Get(requestId);
         request.Status = RequestToJoinStatus.Rejected;
+        await _context.SaveChangesAsync();
     }
 
     /// <inheritdoc/>
     public async Task<IEnumerable<RequestToJoin>> GetAllAsync(int roomId)
     {
-        return await _context.RequestsToJoin.Where(x => x.RoomId == roomId).ToListAsync();
+        return await _context.RequestsToJoin.Include(x => x.Person).Where(x => x.RoomId == roomId).ToListAsync();
     }
 
     private async Task<RequestToJoin> Get(int requestId)

@@ -11,5 +11,6 @@ public class PersonResponse
     public string Lastname { get; set; } = "";
 
     public string Middlename { get; set; } = "";
-}
 
+    public string? RoomRole { get; set; }
+}

@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, ScrollView } from "react-native";
 import React, { FC, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useRoom } from "../../../../providers/RoomProvider";
@@ -15,17 +15,20 @@ interface IRoomMain {
 
 const RoomMain: FC<IRoomMain> = ({ route }) => {
   const navigation = useNavigation();
-
   const { roomId, setRoomId } = useRoom();
-  const { getRoomInfo, roomInfo, isLoading } = useRoomService();
+  const { getRoomInfo, roomInfo, isLoading, members, getAllMembers } =
+    useRoomService();
   const { getCategoriesStatistic, categoriesItems, error, clearError } =
     useStatisticService();
 
   useEffect(() => {
     clearError();
     setRoomId(route.params.roomId);
-    getCategoriesStatistic(roomId);
-    getRoomInfo(roomId);
+    setTimeout(() => {
+      getCategoriesStatistic(roomId);
+      getRoomInfo(roomId);
+      getAllMembers();
+    }, 20);
   }, []);
 
   const chartConfig = {
@@ -64,7 +67,37 @@ const RoomMain: FC<IRoomMain> = ({ route }) => {
           alignItems: "center",
         }}
       >
-        <Text style={{ fontSize: 20, textAlign: "center", marginTop: 10 }}>
+        {categoriesItems?.length !== 0 ? (
+          <View style={{ alignItems: "center" }}>
+            <Text style={{ fontSize: 20, textAlign: "center", marginTop: 10 }}>
+              Самые популярные категории
+            </Text>
+            {categoriesItems && (
+              <PieChart
+                data={categoriesItems}
+                width={380}
+                height={210}
+                chartConfig={chartConfig}
+                accessor={"value"}
+                backgroundColor={"transparent"}
+                paddingLeft={"0"}
+                absolute
+              />
+            )}
+            <Button
+              style={{ marginTop: 10, width: 300, marginBottom: 20 }}
+              title="Подробная статистика"
+              colors={["#3914AF", "white"]}
+              onPress={() => {}}
+            />
+          </View>
+        ) : (
+          <Text style={{ textAlign: "center", fontSize: 20, padding: 10 }}>
+            В данной комнате пока нет ни одной совершённой операции
+          </Text>
+        )}
+
+        {/* <Text style={{ fontSize: 20, textAlign: "center", marginTop: 10 }}>
           Самые популярные категории
         </Text>
         {categoriesItems && (
@@ -78,20 +111,17 @@ const RoomMain: FC<IRoomMain> = ({ route }) => {
             paddingLeft={"0"}
             absolute
           />
-        )}
-        <Button
-          style={{ marginTop: 10, width: 300, marginBottom: 20 }}
-          title="Подробная статистика"
-          colors={["#3914AF", "white"]}
-          onPress={() => {}}
-        />
+        )} */}
       </View>
       <View style={{ width: "80%", marginTop: 20 }}>
-        <Button
-          style={{ marginTop: 10 }}
-          title="Участники комнаты"
-          onPress={() => {}}
-        />
+        <Text style={{ fontSize: 20 }}>Участники комнаты:</Text>
+        <ScrollView style={{ width: "100%", minHeight: 200 }}>
+          {members?.map((item) => (
+            <Text style={{ fontSize: 15 }}>
+              {item.login} ({item.lastname} {item.firstname}) {item.roomRole}
+            </Text>
+          ))}
+        </ScrollView>
       </View>
     </View>
   );

@@ -16,9 +16,9 @@ public class RoomRoleConfiguration : BaseEntityConfiguration<RoomRole>
 
         builder.HasData(new RoomRole[]
         {
-            new RoomRole { Id = 1, Title = "Creator" },
-            new RoomRole { Id = 2, Title = "Admin" },
-            new RoomRole { Id = 3, Title = "Participant" },
+            new RoomRole { Id = 1, Title = "Создатель" },
+            new RoomRole { Id = 2, Title = "Модератор" },
+            new RoomRole { Id = 3, Title = "Участник" },
         });
     }
 }

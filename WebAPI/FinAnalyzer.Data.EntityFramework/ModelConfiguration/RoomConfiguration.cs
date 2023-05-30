@@ -13,13 +13,6 @@ public class RoomConfiguration : BaseEntityConfiguration<Room>
         builder.ToTable("room");
         builder.Property(p => p.Name).HasColumnName("name");
         builder.Property(p => p.Description).HasColumnName("description");
-
-        builder.HasData(new Room
-        {
-            Id = 1,
-            Name = "testRoom",
-            Description = "description",
-        });
     }
 }
 

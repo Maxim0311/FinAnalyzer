@@ -1,32 +1,32 @@
-import { View, Text, StyleSheet, Modal, Pressable } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import Error from '../../ui/Error';
-import Field from '../../ui/Field';
-import { IRoomCreate } from '../../../api/interfaces/room';
-import { useRoomService } from '../../../api/service/RoomService';
-import Button from '../../ui/Button';
-import { useRoom } from '../../../providers/RoomProvider';
+import { View, Text, StyleSheet, Modal, Pressable } from "react-native";
+import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import Error from "../../ui/Error";
+import Field from "../../ui/Field";
+import { IRoomCreate } from "../../../api/interfaces/room";
+import { useRoomService } from "../../../api/service/RoomService";
+import Button from "../../ui/Button";
+import { useRoom } from "../../../providers/RoomProvider";
 
 const RoomCreate = () => {
   const navigation = useNavigation();
 
-  const { createRoom, isLoading, error, clearError } = useRoomService();
+  const { createRoom, isLoading, error, clearError, getAllRooms } =
+    useRoomService();
 
   const { roomId } = useRoom();
 
   const [data, setData] = useState<IRoomCreate>({
-    name: '',
+    name: "",
   });
 
   const roomCreateHandler = async () => {
     clearError();
 
-    console.log('test');
-
     const response = await createRoom(data);
+    await getAllRooms();
 
-    if (response.success) navigation.navigate('Home');
+    if (response.success) navigation.navigate("Home");
   };
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const RoomCreate = () => {
       <View style={styles.content}>
         <Text style={styles.text}>Создание комнаты</Text>
         <Field
-          onChange={value => {
+          onChange={(value) => {
             setData({ ...data, name: value });
           }}
           value={data.name}
@@ -46,7 +46,7 @@ const RoomCreate = () => {
           style={styles.input}
         />
         <Field
-          onChange={value => {
+          onChange={(value) => {
             setData({ ...data, description: value });
           }}
           value={data.description}
@@ -68,20 +68,20 @@ const RoomCreate = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   content: {
-    width: '80%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "80%",
+    justifyContent: "center",
+    alignItems: "center",
   },
   text: {
     fontSize: 30,
   },
   bottomText: {
     marginTop: 10,
-    textAlign: 'right',
+    textAlign: "right",
     opacity: 0.5,
     fontSize: 15,
   },

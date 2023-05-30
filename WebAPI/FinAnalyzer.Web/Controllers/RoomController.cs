@@ -166,4 +166,20 @@ public class RoomController : ControllerBase
 
         return BadRequest(result);
     }
+
+    /// <summary>
+    /// Получить участников комнаты
+    /// </summary>
+    /// <param name="roomId">id комнаты</param>
+    /// <returns></returns>
+    [HttpGet("get-persons-by-room")]
+    public async Task<ActionResult<OperationResult<int>>> GetPersonsByRoomId(int roomId)
+    {
+        var result = await _roomService.GetPersonsByRoom(roomId);
+
+        if (result.Success)
+            return Ok(result);
+
+        return BadRequest(result);
+    }
 }

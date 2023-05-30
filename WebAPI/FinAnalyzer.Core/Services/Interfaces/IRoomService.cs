@@ -1,4 +1,5 @@
 ﻿using FinAnalyzer.Common;
+using FinAnalyzer.Core.Dto.Person;
 
 namespace FinAnalyzer.Core.Services.Interfaces;
 
@@ -17,5 +18,7 @@ public interface IRoomService
         (int personId, PaginationRequest pagination);
 
     Task<OperationResult<RoomResponse>> GetByIdAsync(int id);
+
+    Task<OperationResult<IEnumerable<PersonResponse>>> GetPersonsByRoom(int roomId);
 }
 

@@ -12,6 +12,8 @@ import { useAuth } from "../../hooks/useAuth";
 import { IOperationResult } from "../interfaces/operationResult";
 import { IPagination } from "../interfaces/pagination";
 import { IRoom, IRoomCreate } from "../interfaces/room";
+import { useRoom } from "../../providers/RoomProvider";
+import { IPerson } from "../interfaces/auth";
 
 interface IContext {
   isLoading: boolean;
@@ -35,6 +37,9 @@ interface IContext {
 
   getRoomInfo: (roomId: number) => Promise<void>;
 
+  getAllMembers: () => Promise<void>;
+  members: IPerson[];
+
   createRoom: (room: IRoomCreate) => Promise<IOperationResult<number>>;
 }
 
@@ -42,7 +47,7 @@ export const RoomServiceContext = createContext<IContext>({} as IContext);
 
 export const RoomServiceProvider: FC<any> = ({ children }) => {
   const { getToken, user } = useAuth();
-
+  const { roomId } = useRoom();
   const [token, setToken] = useState<string | null>();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -50,6 +55,8 @@ export const RoomServiceProvider: FC<any> = ({ children }) => {
 
   const [rooms, setRooms] = useState<IRoom[]>(null);
   const [roomInfo, setRoomInfo] = useState<IRoom>(null);
+
+  const [members, setMembers] = useState<IPerson[]>(null);
 
   useEffect(() => {
     getToken().then((jwt) => setToken(jwt));
@@ -186,6 +193,31 @@ export const RoomServiceProvider: FC<any> = ({ children }) => {
     }
   };
 
+  const getAllMembers = async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await axios.get<IOperationResult<IPerson[]>>(
+        `${API_URL}/rooms/get-persons-by-room?roomId=${roomId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (data.success) {
+        setMembers(data.result);
+      } else {
+        setError(data.message);
+      }
+    } catch (e: any) {
+      if (e.response?.status === 403) setError("У вас недостаточно прав");
+      else setError(e.response?.data?.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const value = useMemo(
     () => ({
       isLoading,
@@ -197,6 +229,8 @@ export const RoomServiceProvider: FC<any> = ({ children }) => {
       rooms,
       getRoomInfo,
       roomInfo,
+      getAllMembers,
+      members,
     }),
     [rooms, setRooms, getAllRooms, isLoading, error]
   );

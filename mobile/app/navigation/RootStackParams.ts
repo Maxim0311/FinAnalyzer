@@ -1,4 +1,4 @@
-import { ICategoryUpdate } from '../api/interfaces/category';
+import { ICategoryUpdate } from "../api/interfaces/category";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -8,6 +8,8 @@ export type RootStackParamList = {
   RoomCreate: undefined;
   Room: undefined;
   RoomMain: undefined;
+  RoomMainMain: undefined;
+  RequestToJoin: undefined;
   Transactions: undefined;
   TransactionsMain: undefined;
   TransactionsCreate: undefined;

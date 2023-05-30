@@ -52,4 +52,15 @@ public class PersonRepository : BaseRepository<Person>, IPersonRepository
         await _context.SaveChangesAsync();
         return true;
     }
+
+    public async Task<IEnumerable<Person>> GetByRoomId(int roomId)
+    {
+        return await _context.Persons.Include(x => x.PersonRooms).Where(x => x.PersonRooms.Any(y => y.RoomId == roomId)).ToListAsync();
+    }
+
+    public async Task<string> GetRoomRole(int personId, int roomId)
+    {
+        var personRoom = await _context.PersonRooms.Include(x => x.RoomRole).FirstOrDefaultAsync(x => x.PersonId == personId && x.RoomId == roomId);
+        return personRoom.RoomRole.Title;
+    }
 }

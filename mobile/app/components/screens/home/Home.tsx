@@ -5,21 +5,23 @@ import {
   ScrollView,
   Alert,
   RefreshControl,
-} from 'react-native';
-import React, { FC, useEffect, useState } from 'react';
-import { useAuth } from '../../../hooks/useAuth';
-import RoomItem from './RoomItem';
-import { useRoomService } from '../../../api/service/RoomService';
-import { IPagination } from '../../../api/interfaces/pagination';
-import { IRoom } from '../../../api/interfaces/room';
-import { IOperationResult } from '../../../api/interfaces/operationResult';
-import Field from '../../ui/Field';
-import NotFound from '../../ui/NotFound';
-import RoomChecker from './RoomChecker';
-import HomeMenu from './HomeMenu';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import { MenuOption } from 'react-native-popup-menu';
-import { useNavigation } from '@react-navigation/native';
+} from "react-native";
+import React, { FC, useEffect, useState } from "react";
+import { useAuth } from "../../../hooks/useAuth";
+import RoomItem from "./RoomItem";
+import { useRoomService } from "../../../api/service/RoomService";
+import { IPagination } from "../../../api/interfaces/pagination";
+import { IRoom } from "../../../api/interfaces/room";
+import { IOperationResult } from "../../../api/interfaces/operationResult";
+import Field from "../../ui/Field";
+import NotFound from "../../ui/NotFound";
+import RoomChecker from "./RoomChecker";
+import HomeMenu from "./HomeMenu";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import { MenuOption } from "react-native-popup-menu";
+import { useNavigation } from "@react-navigation/native";
+import { log } from "react-native-reanimated";
+import { useRequestToJoinService } from "../../../api/service/RequestToJoinService";
 
 const Home: FC = () => {
   const { user } = useAuth();
@@ -35,11 +37,13 @@ const Home: FC = () => {
     rooms,
   } = useRoomService();
 
+  const { apply } = useRequestToJoinService();
+
   const [data, setData] = useState<
     IOperationResult<IPagination<IRoom>> | null | undefined
   >(null);
 
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
 
   const [isAllRooms, setIsAllRooms] = useState(true);
 
@@ -63,13 +67,30 @@ const Home: FC = () => {
 
   const roomPressHandler = (id: number) => {
     if (isAllRooms) {
-      Alert.prompt(
-        'Подтверждение',
-        'Вы уверены что хотите подать заявку на вступление в эту комнату?'
+      Alert.alert(
+        "Подать заявку на вступление",
+        "Вы уверены что хотите подать заявку на вступление в эту комнату?",
+        [
+          {
+            text: "Отмена",
+            style: "cancel",
+          },
+          {
+            text: "Подтвердить",
+            onPress: () => {
+              apply(id, user.id);
+              Alert.alert("Заявка подана");
+            },
+            style: "default",
+          },
+        ],
+        {
+          cancelable: true,
+        }
       );
     } else {
-      navigation.navigate('Room', {
-        screen: 'RoomMain',
+      navigation.navigate("Room", {
+        screen: "RoomMain",
         params: { roomId: id },
       } as any);
     }
@@ -99,24 +120,24 @@ const Home: FC = () => {
       <Text style={styles.headText}>Комнаты</Text>
       <View
         style={{
-          width: '90%',
+          width: "90%",
           marginBottom: 10,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
         <Field
-          onChange={value => setSearchText(value)}
+          onChange={(value) => setSearchText(value)}
           value={searchText}
           placeholder="Поиск..."
-          style={{ width: '85%' }}
+          style={{ width: "85%" }}
           isSearch
         />
         <HomeMenu>
           <MenuOption
-            style={{ flexDirection: 'row', alignItems: 'center' }}
-            onSelect={() => navigation.navigate('RoomCreate')}
+            style={{ flexDirection: "row", alignItems: "center" }}
+            onSelect={() => navigation.navigate("RoomCreate")}
           >
             <Icon name="add-chart" size={30} />
             <Text style={{ fontSize: 20, marginLeft: 10 }}>
@@ -136,10 +157,10 @@ const Home: FC = () => {
             onRefresh={fetchData}
           />
         }
-        style={{ width: '100%' }}
+        style={{ width: "100%" }}
       >
         {rooms &&
-          rooms.map(item => (
+          rooms.map((item) => (
             <RoomItem
               key={item.id}
               name={item.name}
@@ -158,7 +179,7 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 15,
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
   },
   headText: {
     marginTop: 10,

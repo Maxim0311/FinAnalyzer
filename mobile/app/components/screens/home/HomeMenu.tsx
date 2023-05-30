@@ -1,13 +1,13 @@
-import React, { FC } from 'react';
+import React, { FC } from "react";
 import {
   Menu,
   MenuTrigger,
   MenuOption,
   MenuOptions,
-} from 'react-native-popup-menu';
-import Icon from 'react-native-vector-icons/Feather';
+} from "react-native-popup-menu";
+import Icon from "react-native-vector-icons/Feather";
 
-const HomeMenu: FC = ({ children }) => {
+const HomeMenu: FC<any> = ({ children }) => {
   return (
     <Menu>
       <MenuTrigger>
@@ -17,7 +17,7 @@ const HomeMenu: FC = ({ children }) => {
         customStyles={{
           optionsContainer: {
             padding: 10,
-            width: 'auto',
+            width: "auto",
           },
         }}
       >
