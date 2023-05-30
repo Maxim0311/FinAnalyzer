@@ -6,19 +6,28 @@ import {
   TextInputComponent,
   ScrollView,
   RefreshControl,
-} from 'react-native';
-import React, { useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import Icon from '../../../ui/Icon';
-import { useTransactionService } from '../../../../api/service/TransactionService';
-import TransactionItem from './TransactionItem';
+} from "react-native";
+import React, { useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
+import Icon from "../../../ui/Icon";
+import { useTransactionService } from "../../../../api/service/TransactionService";
+import TransactionItem from "./TransactionItem";
+import Error from "../../../ui/Error";
+import NotFound from "../../../ui/NotFound";
+import { useCategoryService } from "../../../../api/service/CategoryService";
+import { useAccountService } from "../../../../api/service/AccountService";
 
 const Transactions = () => {
   const navigation = useNavigation();
-  const { getAllTransactions, transactions, error, isLoading } =
+  const { getAllTransactions, transactions, error, isLoading, clearError } =
     useTransactionService();
+  const { getAllCategories } = useCategoryService();
+  const { getAllAccounts } = useAccountService();
 
   useEffect(() => {
+    getAllCategories();
+    getAllAccounts();
+    clearError();
     getAllTransactions();
   }, []);
 
@@ -27,7 +36,7 @@ const Transactions = () => {
       <Text style={styles.headerText}>Операции</Text>
       <Pressable
         style={styles.headerIcon}
-        onPress={() => navigation.navigate('TransactionsCreate')}
+        onPress={() => navigation.navigate("TransactionsCreate")}
       >
         <Icon author="Ionicons" name="add" size={35} />
       </Pressable>
@@ -39,11 +48,15 @@ const Transactions = () => {
             onRefresh={getAllTransactions}
           />
         }
-        style={{ width: '100%', minHeight: 200, paddingHorizontal: 30 }}
+        style={{ width: "100%", minHeight: 200, paddingHorizontal: 30 }}
       >
-        {transactions?.map(item => (
-          <TransactionItem transaction={item} key={item.id} />
-        ))}
+        {error ? (
+          <NotFound title={error} />
+        ) : (
+          transactions?.map((item) => (
+            <TransactionItem transaction={item} key={item.id} />
+          ))
+        )}
       </ScrollView>
     </View>
   );
@@ -51,13 +64,13 @@ const Transactions = () => {
 const styles = StyleSheet.create({
   headerText: {
     fontSize: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   accountTypeTitle: {
     fontSize: 15,
   },
   headerIcon: {
-    position: 'absolute',
+    position: "absolute",
     right: 10,
   },
 });

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 import {
   createContext,
   Dispatch,
@@ -6,16 +6,16 @@ import {
   SetStateAction,
   useMemo,
   useState,
-} from 'react';
-import { IOperationResult } from '../api/interfaces/operationResult';
+} from "react";
+import { IOperationResult } from "../api/interfaces/operationResult";
 import {
   IAuthRequest,
   IAuthResponse,
   IPerson,
   IRegistrationRequest,
-} from '../api/interfaces/auth';
-import { API_URL } from '../api';
-import * as SecureStore from 'expo-secure-store';
+} from "../api/interfaces/auth";
+import { API_URL } from "../api";
+import * as SecureStore from "expo-secure-store";
 
 interface IContext {
   user: IPerson | null | undefined;
@@ -31,7 +31,7 @@ interface IContext {
 
 export const AuthContext = createContext<IContext>({} as IContext);
 
-export const AuthProvider: FC = ({ children }) => {
+export const AuthProvider: FC<any> = ({ children }) => {
   const [user, setUser] = useState<IPerson | null>();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +51,7 @@ export const AuthProvider: FC = ({ children }) => {
           `${API_URL}/auth/registration`,
           regRequest
         )
-        .then(resp => resp);
+        .then((resp) => resp);
 
       if (data.success) {
         return true;
@@ -74,12 +74,12 @@ export const AuthProvider: FC = ({ children }) => {
           `${API_URL}/auth/authenticate`,
           authRequest
         )
-        .then(resp => resp);
+        .then((resp) => resp);
 
       if (data.success) {
         setUser(data?.result?.person);
 
-        await SecureStore.setItemAsync('token', data.result!.token);
+        await SecureStore.setItemAsync("token", data.result!.token);
       }
     } catch (e: any) {
       console.log(e);
@@ -93,12 +93,12 @@ export const AuthProvider: FC = ({ children }) => {
   const logout = async () => {
     setUser(null);
 
-    await SecureStore.deleteItemAsync('token');
+    await SecureStore.deleteItemAsync("token");
   };
 
   const getToken = async (): Promise<string | null> => {
     try {
-      return await SecureStore.getItemAsync('token').then(token => token);
+      return await SecureStore.getItemAsync("token").then((token) => token);
     } catch (e: any) {
       return null;
     }

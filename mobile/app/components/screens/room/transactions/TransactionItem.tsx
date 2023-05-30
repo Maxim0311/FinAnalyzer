@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet } from 'react-native';
-import React, { FC } from 'react';
-import { ITransaction } from '../../../../api/interfaces/transaction';
+import { View, Text, StyleSheet } from "react-native";
+import React, { FC } from "react";
+import { ITransaction } from "../../../../api/interfaces/transaction";
 
 interface ITransactionItemProps {
   transaction: ITransaction;
@@ -10,11 +10,11 @@ const TransactionItem: FC<ITransactionItemProps> = ({ transaction }) => {
   const transactionTypeToString = (id: number) => {
     switch (id) {
       case 1:
-        return 'Доход';
+        return "Доход";
       case 2:
-        return 'Расход';
+        return "Расход";
       case 3:
-        return 'Перевод';
+        return "Перевод";
     }
   };
 
@@ -23,29 +23,33 @@ const TransactionItem: FC<ITransactionItemProps> = ({ transaction }) => {
       style={{ ...styles.container, ...styles.shadow, paddingVertical: 10 }}
     >
       <View>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Text>
-            {new Date(transaction.createDate).toLocaleString('ru-RU')}
+            {new Date(transaction.createDate).toLocaleString("ru-RU")}
           </Text>
           <Text>{transactionTypeToString(transaction.transactionTypeId)}</Text>
         </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text>Описание: {transaction.name}</Text>
-          <Text style={{ fontSize: 20 }}>{transaction.amount} р.</Text>
-        </View>
         <View>
           <Text>
-            Отправитель: {transaction.sender.name}{' '}
+            Отправитель: {transaction.sender.name}{" "}
             {transaction.sender.personName &&
               `(${transaction.sender.personName})`}
           </Text>
           <Text>
-            Получатель: {transaction.destination.name}{' '}
+            Получатель: {transaction.destination.name}{" "}
             {transaction.destination.personName &&
               `(${transaction.destination.personName})`}
           </Text>
           {transaction.category?.name && (
             <Text>Категория: {transaction.category.name}</Text>
+          )}
+          {transaction.category?.description && (
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <Text>Описание: {transaction.name}</Text>
+              <Text style={{ fontSize: 20 }}>{transaction.amount} р.</Text>
+            </View>
           )}
         </View>
       </View>
@@ -56,16 +60,16 @@ const TransactionItem: FC<ITransactionItemProps> = ({ transaction }) => {
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 15,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 8,
     paddingVertical: 15,
     paddingHorizontal: 25,
     marginVertical: 10,
     maxHeight: 150,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   shadow: {
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 7,
@@ -77,21 +81,21 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 15,
-    maxWidth: '80%',
+    maxWidth: "80%",
   },
   balance: {
     fontSize: 20,
-    textAlign: 'right',
-    alignItems: 'flex-end',
+    textAlign: "right",
+    alignItems: "flex-end",
   },
   description: {
     opacity: 0.5,
   },
   iconWrapper: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    width: '20%',
+    justifyContent: "center",
+    alignItems: "flex-end",
+    width: "20%",
   },
 });
 

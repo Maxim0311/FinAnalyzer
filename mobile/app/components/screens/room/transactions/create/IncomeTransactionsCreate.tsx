@@ -43,6 +43,7 @@ const IncomeTransactionsCreate = () => {
   });
 
   useEffect(() => {
+    clearError();
     getAllAccounts();
     getAllCategories();
   }, []);

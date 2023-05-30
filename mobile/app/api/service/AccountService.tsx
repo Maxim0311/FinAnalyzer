@@ -5,14 +5,14 @@ import React, {
   useEffect,
   useMemo,
   useState,
-} from 'react';
-import { useAuth } from '../../hooks/useAuth';
-import axios from 'axios';
-import { API_URL } from '../../api';
-import { IOperationResult } from '../interfaces/operationResult';
-import { useRoom } from '../../providers/RoomProvider';
-import { IAccount, IAccountCreate } from '../interfaces/account';
-import { acc } from 'react-native-reanimated';
+} from "react";
+import { useAuth } from "../../hooks/useAuth";
+import axios from "axios";
+import { API_URL } from "../../api";
+import { IOperationResult } from "../interfaces/operationResult";
+import { useRoom } from "../../providers/RoomProvider";
+import { IAccount, IAccountCreate } from "../interfaces/account";
+import { acc } from "react-native-reanimated";
 
 interface IContext {
   isLoading: boolean;
@@ -25,7 +25,7 @@ interface IContext {
 
 const AccountServiceContext = createContext<IContext>({} as IContext);
 
-export const AccountServiceProvider: FC = ({ children }) => {
+export const AccountServiceProvider: FC<any> = ({ children }) => {
   const { getToken, user } = useAuth();
   const { roomId } = useRoom();
 
@@ -39,7 +39,7 @@ export const AccountServiceProvider: FC = ({ children }) => {
   const clearError = () => setError(null);
 
   useEffect(() => {
-    getToken().then(jwt => setToken(jwt));
+    getToken().then((jwt) => setToken(jwt));
   }, []);
 
   const createAccount = async (account: IAccountCreate) => {
@@ -69,7 +69,7 @@ export const AccountServiceProvider: FC = ({ children }) => {
       }
     } catch (e: any) {
       if (e.response?.status === 403) {
-        setError('У вас недостаточно прав');
+        setError("У вас недостаточно прав");
       } else {
         setError(e.response?.data?.message);
       }
@@ -101,7 +101,7 @@ export const AccountServiceProvider: FC = ({ children }) => {
       }
     } catch (e: any) {
       if (e.response?.status === 403) {
-        setError('У вас недостаточно прав');
+        setError("У вас недостаточно прав");
       } else {
         setError(e.response?.data?.message);
       }

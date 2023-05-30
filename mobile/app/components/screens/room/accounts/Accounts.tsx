@@ -5,12 +5,13 @@ import {
   RefreshControl,
   ScrollView,
   Pressable,
-} from 'react-native';
-import React, { useEffect } from 'react';
-import { useAccountService } from '../../../../api/service/AccountService';
-import AccountItem from './AccountItem';
-import { useNavigation } from '@react-navigation/native';
-import Icon from '../../../ui/Icon';
+} from "react-native";
+import React, { useEffect } from "react";
+import { useAccountService } from "../../../../api/service/AccountService";
+import AccountItem from "./AccountItem";
+import { useNavigation } from "@react-navigation/native";
+import Icon from "../../../ui/Icon";
+import Loader from "../../../ui/Loader";
 
 const Accounts = () => {
   const { accounts, isLoading, getAllAccounts } = useAccountService();
@@ -24,12 +25,12 @@ const Accounts = () => {
       <Text style={styles.headerText}>Счета</Text>
       <Pressable
         style={styles.headerIcon}
-        onPress={() => navigation.navigate('AccountsCreate')}
+        onPress={() => navigation.navigate("AccountsCreate")}
       >
         <Icon author="Ionicons" name="add" size={35} />
       </Pressable>
       {isLoading ? (
-        <Text>Loading...</Text>
+        <Loader />
       ) : (
         <ScrollView
           refreshControl={
@@ -39,22 +40,22 @@ const Accounts = () => {
               onRefresh={getAllAccounts}
             />
           }
-          style={{ width: '100%' }}
+          style={{ width: "100%" }}
         >
           <View>
             <View>
               <Text style={styles.accountTypeTitle}>Общие счета</Text>
               {accounts
-                ?.filter(x => x.accountType.id == 2)
-                .map(item => (
+                ?.filter((x) => x.accountType.id == 2)
+                .map((item) => (
                   <AccountItem account={item} />
                 ))}
             </View>
             <View>
               <Text style={styles.accountTypeTitle}>Личные счета</Text>
               {accounts
-                ?.filter(x => x.accountType.id == 1)
-                .map(item => (
+                ?.filter((x) => x.accountType.id == 1)
+                .map((item) => (
                   <AccountItem account={item} />
                 ))}
             </View>
@@ -68,13 +69,13 @@ const Accounts = () => {
 const styles = StyleSheet.create({
   headerText: {
     fontSize: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   accountTypeTitle: {
     fontSize: 15,
   },
   headerIcon: {
-    position: 'absolute',
+    position: "absolute",
     right: 10,
   },
 });

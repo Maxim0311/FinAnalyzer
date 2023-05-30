@@ -27,7 +27,8 @@ public static class FinAnalyserDI
             .AddScoped<IAuthService, AuthService>()
             .AddScoped<ICategoryService, CategoryService>()
             .AddScoped<ITransactionService, TransactionService>()
-            .AddScoped<IAccountService, AccountService>();
+            .AddScoped<IAccountService, AccountService>()
+            .AddScoped<IStatisticService, StatisticService>();
     }
 
     public static IServiceCollection AddValidatorsDI(this IServiceCollection services)

@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError } from "axios";
 import {
   createContext,
   FC,
@@ -6,17 +6,18 @@ import {
   useEffect,
   useMemo,
   useState,
-} from 'react';
-import { API_URL } from '../../api';
-import { useAuth } from '../../hooks/useAuth';
-import { IOperationResult } from '../interfaces/operationResult';
-import { IPagination } from '../interfaces/pagination';
-import { IRoom, IRoomCreate } from '../interfaces/room';
+} from "react";
+import { API_URL } from "../../api";
+import { useAuth } from "../../hooks/useAuth";
+import { IOperationResult } from "../interfaces/operationResult";
+import { IPagination } from "../interfaces/pagination";
+import { IRoom, IRoomCreate } from "../interfaces/room";
 
 interface IContext {
   isLoading: boolean;
   error: string | null | undefined;
   rooms: IRoom[];
+  roomInfo: IRoom;
   clearError: () => void;
 
   getAllRooms: (
@@ -32,12 +33,14 @@ interface IContext {
     searchText?: string
   ) => Promise<void>;
 
+  getRoomInfo: (roomId: number) => Promise<void>;
+
   createRoom: (room: IRoomCreate) => Promise<IOperationResult<number>>;
 }
 
-const RoomServiceContext = createContext<IContext>({} as IContext);
+export const RoomServiceContext = createContext<IContext>({} as IContext);
 
-export const RoomServiceProvider: FC = ({ children }) => {
+export const RoomServiceProvider: FC<any> = ({ children }) => {
   const { getToken, user } = useAuth();
 
   const [token, setToken] = useState<string | null>();
@@ -46,12 +49,37 @@ export const RoomServiceProvider: FC = ({ children }) => {
   const [error, setError] = useState<string | null>();
 
   const [rooms, setRooms] = useState<IRoom[]>(null);
+  const [roomInfo, setRoomInfo] = useState<IRoom>(null);
 
   useEffect(() => {
-    getToken().then(jwt => setToken(jwt));
+    getToken().then((jwt) => setToken(jwt));
   }, []);
 
   const clearError = () => setError(null);
+
+  const getRoomInfo = async (roomId: number) => {
+    try {
+      setIsLoading(true);
+      const { data } = await axios.get<IOperationResult<IRoom>>(
+        `${API_URL}/rooms/${roomId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (data.success) {
+        setRoomInfo(data.result);
+      }
+    } catch (e: any) {
+      const error = e as AxiosError<IOperationResult<IRoom> | null | undefined>;
+
+      if (error.response?.status === 403) setError("У вас недостаточно прав");
+      else setError(error.response?.data?.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const getAllRooms = async (
     skip?: number,
@@ -62,7 +90,7 @@ export const RoomServiceProvider: FC = ({ children }) => {
       setIsLoading(true);
       const { data } = await axios.get<IOperationResult<IPagination<IRoom>>>(
         `${API_URL}/rooms?skip=${skip}&take=${take}&searchText=${
-          searchText ? searchText : ''
+          searchText ? searchText : ""
         }`,
         {
           headers: {
@@ -78,7 +106,7 @@ export const RoomServiceProvider: FC = ({ children }) => {
         IOperationResult<IPagination<IRoom>> | null | undefined
       >;
 
-      if (error.response?.status === 403) setError('У вас недостаточно прав');
+      if (error.response?.status === 403) setError("У вас недостаточно прав");
       else setError(error.response?.data?.message);
     } finally {
       setIsLoading(false);
@@ -95,7 +123,7 @@ export const RoomServiceProvider: FC = ({ children }) => {
       setIsLoading(true);
       const { data } = await axios.get<IOperationResult<IPagination<IRoom>>>(
         `${API_URL}/rooms/get-by-personid/${personId}?skip=${skip}&take=${take}&searchText=${
-          searchText ? searchText : ''
+          searchText ? searchText : ""
         }`,
         {
           headers: {
@@ -115,7 +143,7 @@ export const RoomServiceProvider: FC = ({ children }) => {
       >;
 
       if (error.response?.status === 403) {
-        setError('У вас недостаточно прав');
+        setError("У вас недостаточно прав");
       } else {
         setError(error.response?.data?.message);
       }
@@ -147,7 +175,7 @@ export const RoomServiceProvider: FC = ({ children }) => {
       const error = e as AxiosError<IOperationResult<any> | null | undefined>;
 
       if (error.response?.status === 403) {
-        setError('У вас недостаточно прав');
+        setError("У вас недостаточно прав");
       } else {
         setError(error.response?.data?.message);
       }
@@ -167,6 +195,8 @@ export const RoomServiceProvider: FC = ({ children }) => {
       getRoomsByPersonId,
       createRoom,
       rooms,
+      getRoomInfo,
+      roomInfo,
     }),
     [rooms, setRooms, getAllRooms, isLoading, error]
   );

@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text } from "react-native";
 import React, {
   createContext,
   Dispatch,
@@ -6,7 +6,7 @@ import React, {
   SetStateAction,
   useContext,
   useState,
-} from 'react';
+} from "react";
 
 interface IContext {
   roomId: number | null;
@@ -15,7 +15,7 @@ interface IContext {
 
 export const RoomContext = createContext<IContext>({} as IContext);
 
-export const RoomProvider: FC = ({ children }) => {
+export const RoomProvider: FC<any> = ({ children }) => {
   const [roomId, setRoomId] = useState<number | null>(null);
 
   return (

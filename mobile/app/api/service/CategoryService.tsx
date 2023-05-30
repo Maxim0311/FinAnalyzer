@@ -1,4 +1,4 @@
-import { Alert } from 'react-native';
+import { Alert } from "react-native";
 import React, {
   createContext,
   FC,
@@ -6,17 +6,17 @@ import React, {
   useEffect,
   useMemo,
   useState,
-} from 'react';
+} from "react";
 import {
   ICategory,
   ICategoryCreate,
   ICategoryUpdate,
-} from '../interfaces/category';
-import { useAuth } from '../../hooks/useAuth';
-import axios from 'axios';
-import { API_URL } from '../../api';
-import { IOperationResult } from '../interfaces/operationResult';
-import { useRoom } from '../../providers/RoomProvider';
+} from "../interfaces/category";
+import { useAuth } from "../../hooks/useAuth";
+import axios from "axios";
+import { API_URL } from "../../api";
+import { IOperationResult } from "../interfaces/operationResult";
+import { useRoom } from "../../providers/RoomProvider";
 
 interface IContext {
   isLoading: boolean;
@@ -31,7 +31,7 @@ interface IContext {
 
 const CategoryServiceContext = createContext<IContext>({} as IContext);
 
-export const CategoryServiceProvider: FC = ({ children }) => {
+export const CategoryServiceProvider: FC<any> = ({ children }) => {
   const { getToken, user } = useAuth();
   const { roomId } = useRoom();
 
@@ -45,7 +45,7 @@ export const CategoryServiceProvider: FC = ({ children }) => {
   const clearError = () => setError(null);
 
   useEffect(() => {
-    getToken().then(jwt => setToken(jwt));
+    getToken().then((jwt) => setToken(jwt));
   }, []);
 
   const getAllCategories = async () => {
@@ -70,7 +70,7 @@ export const CategoryServiceProvider: FC = ({ children }) => {
       }
     } catch (e: any) {
       if (e.response?.status === 403) {
-        setError('У вас недостаточно прав');
+        setError("У вас недостаточно прав");
       } else {
         setError(e.response?.data?.message);
       }
@@ -98,14 +98,14 @@ export const CategoryServiceProvider: FC = ({ children }) => {
       );
 
       if (data.success) {
-        Alert.alert('Категория успешно создана');
+        Alert.alert("Категория успешно создана");
         return true;
       } else {
         return false;
       }
     } catch (e: any) {
       if (e.response?.status === 403) {
-        setError('У вас недостаточно прав');
+        setError("У вас недостаточно прав");
       } else {
         setError(e.response?.data?.message);
       }
@@ -135,7 +135,7 @@ export const CategoryServiceProvider: FC = ({ children }) => {
       return false;
     } catch (e: any) {
       if (e.response?.status === 403) {
-        setError('У вас недостаточно прав');
+        setError("У вас недостаточно прав");
       } else {
         setError(e.response?.data?.message);
       }
@@ -164,7 +164,7 @@ export const CategoryServiceProvider: FC = ({ children }) => {
       console.log(e);
 
       if (e.response?.status === 403) {
-        setError('У вас недостаточно прав');
+        setError("У вас недостаточно прав");
       } else {
         setError(e.response?.data?.message);
       }

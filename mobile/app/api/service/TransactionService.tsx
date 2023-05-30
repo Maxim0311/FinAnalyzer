@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text } from "react-native";
 import React, {
   createContext,
   FC,
@@ -7,18 +7,19 @@ import React, {
   useEffect,
   useMemo,
   useState,
-} from 'react';
+} from "react";
 import {
   IExpendTransaction,
   IIncomeTransaction,
   IPersonTransaction,
   ITransaction,
-} from '../interfaces/transaction';
-import { useAuth } from '../../hooks/useAuth';
-import { useRoom } from '../../providers/RoomProvider';
-import axios from 'axios';
-import { API_URL } from '../../api';
-import { IOperationResult } from '../interfaces/operationResult';
+} from "../interfaces/transaction";
+import { useAuth } from "../../hooks/useAuth";
+import { useRoom } from "../../providers/RoomProvider";
+import axios from "axios";
+import { API_URL } from "../../api";
+import { IOperationResult } from "../interfaces/operationResult";
+import { useStatisticService } from "./StatisticService";
 
 interface IContext {
   isLoading: boolean;
@@ -35,10 +36,10 @@ interface IContext {
 
 const TransactionServiceContext = createContext<IContext>({} as IContext);
 
-export const TransactionServiceProvider: FC = ({ children }) => {
+export const TransactionServiceProvider: FC<any> = ({ children }) => {
   const { getToken, user } = useAuth();
   const { roomId } = useRoom();
-
+  const { updateAllStatistic } = useStatisticService();
   const [token, setToken] = useState<string | null>();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -49,7 +50,7 @@ export const TransactionServiceProvider: FC = ({ children }) => {
   const clearError = () => setError(null);
 
   useEffect(() => {
-    getToken().then(jwt => setToken(jwt));
+    getToken().then((jwt) => setToken(jwt));
   }, []);
 
   const getAllTransactions = async () => {
@@ -74,7 +75,7 @@ export const TransactionServiceProvider: FC = ({ children }) => {
       }
     } catch (e: any) {
       if (e.response?.status === 403) {
-        setError('У вас недостаточно прав');
+        setError("У вас недостаточно прав");
       } else {
         setError(e.response?.data?.message);
       }
@@ -99,6 +100,7 @@ export const TransactionServiceProvider: FC = ({ children }) => {
       );
 
       if (data.success) {
+        await updateAllStatistic(roomId);
         return true;
       } else {
         setError(data.message);
@@ -106,7 +108,7 @@ export const TransactionServiceProvider: FC = ({ children }) => {
       }
     } catch (e: any) {
       if (e.response?.status === 403) {
-        setError('У вас недостаточно прав');
+        setError("У вас недостаточно прав");
       } else {
         setError(e.response?.data?.message);
       }
@@ -131,6 +133,7 @@ export const TransactionServiceProvider: FC = ({ children }) => {
       );
 
       if (data.success) {
+        await updateAllStatistic(roomId);
         return true;
       } else {
         setError(data.message);
@@ -138,7 +141,7 @@ export const TransactionServiceProvider: FC = ({ children }) => {
       }
     } catch (e: any) {
       if (e.response?.status === 403) {
-        setError('У вас недостаточно прав');
+        setError("У вас недостаточно прав");
       } else {
         setError(e.response?.data?.message);
       }
@@ -163,6 +166,7 @@ export const TransactionServiceProvider: FC = ({ children }) => {
       );
 
       if (data.success) {
+        await updateAllStatistic(roomId);
         return true;
       } else {
         setError(data.message);
@@ -170,7 +174,7 @@ export const TransactionServiceProvider: FC = ({ children }) => {
       }
     } catch (e: any) {
       if (e.response?.status === 403) {
-        setError('У вас недостаточно прав');
+        setError("У вас недостаточно прав");
       } else {
         setError(e.response?.data?.message);
       }
