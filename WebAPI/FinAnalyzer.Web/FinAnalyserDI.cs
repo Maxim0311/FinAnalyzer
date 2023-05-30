@@ -17,7 +17,8 @@ public static class FinAnalyserDI
             .AddScoped<IGlobalRoleRepository, GlobalRoleRepository>()
             .AddScoped<IPersonRoomRepository, PersonRoomRepository>()
             .AddScoped<ITransactionRepository, TransactionRepository>()
-            .AddScoped<ICategoryRepository, CategoryRepository>();
+            .AddScoped<ICategoryRepository, CategoryRepository>()
+            .AddScoped<IRequestToJoinRepository, RequestToJoinRepository>();
     }
 
     public static IServiceCollection AddServicesDI(this IServiceCollection services)

@@ -9,4 +9,6 @@ public class RequestToJoin : BaseEntity
     public Person Person { get; set; }
 
     public int PersonId { get; set; }
+
+    public RequestToJoinStatus Status { get; set; }
 }
