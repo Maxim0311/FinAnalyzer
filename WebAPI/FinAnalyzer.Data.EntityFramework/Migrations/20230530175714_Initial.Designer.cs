@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FinAnalyzer.Data.EntityFramework.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221226192452_init")]
-    partial class init
+    [Migration("20230530175714_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -198,21 +198,6 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("category", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Color = "black",
-                            CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "description",
-                            IconAuthor = "test",
-                            IconName = "test",
-                            IsExpenditure = false,
-                            Name = "testCategory",
-                            RoomId = 1,
-                            UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("FinAnalyzer.Domain.Entities.GlobalRole", b =>
@@ -388,6 +373,9 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("room_id");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("UpdateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
@@ -440,16 +428,6 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("room", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "description",
-                            Name = "testRoom",
-                            UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("FinAnalyzer.Domain.Entities.RoomRole", b =>
@@ -490,21 +468,21 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                         {
                             Id = 1,
                             CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "Creator",
+                            Title = "Создатель",
                             UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
                             CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "Admin",
+                            Title = "Модератор",
                             UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 3,
                             CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "Participant",
+                            Title = "Участник",
                             UpdateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });

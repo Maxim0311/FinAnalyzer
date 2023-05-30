@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace FinAnalyzer.Data.EntityFramework.Migrations
 {
-    public partial class init : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -223,6 +223,7 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     room_id = table.Column<int>(type: "integer", nullable: false),
                     person_id = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     create_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     update_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     delete_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -315,18 +316,13 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "room",
-                columns: new[] { "Id", "delete_date", "description", "name" },
-                values: new object[] { 1, null, "description", "testRoom" });
-
-            migrationBuilder.InsertData(
                 table: "room_role",
                 columns: new[] { "Id", "delete_date", "title" },
                 values: new object[,]
                 {
-                    { 1, null, "Creator" },
-                    { 2, null, "Admin" },
-                    { 3, null, "Participant" }
+                    { 1, null, "Создатель" },
+                    { 2, null, "Модератор" },
+                    { 3, null, "Участник" }
                 });
 
             migrationBuilder.InsertData(
@@ -338,11 +334,6 @@ namespace FinAnalyzer.Data.EntityFramework.Migrations
                     { 2, null, "Expenditure" },
                     { 3, null, "Transfer" }
                 });
-
-            migrationBuilder.InsertData(
-                table: "category",
-                columns: new[] { "Id", "color", "delete_date", "description", "icon_author", "icon_name", "is_expenditure", "name", "room_id" },
-                values: new object[] { 1, "black", null, "description", "test", "test", false, "testCategory", 1 });
 
             migrationBuilder.InsertData(
                 table: "person",
